@@ -1,0 +1,419 @@
+## ------------------------------------------------------------------------
+## Title: Visualization of Predators' Diet Compositions
+##
+## Author: Gen-Chang Hsu
+##
+## Date: 2021-03-10
+##
+## Description: 
+## 1. Line charts of dietary proportions of predators as a whole, spiders, and ladybeetles.
+## 2. Line charts of rice herbivore consumption by predators as a whole, spiders, and ladybeetles.
+## 3. Line charts of relative abundances of prey sources over crop stages.
+##
+## Notes:
+##
+##
+## ------------------------------------------------------------------------
+set.seed(123)
+
+
+# Libraries ---------------------------------------------------------------
+library(tidyverse)
+library(magrittr)
+library(xlsx)
+
+
+# ggplot theme -----------------------------------------------------------
+my_theme <- 
+  theme(# Axis
+        axis.text.x = element_text(size = 12, color = "black"),
+        axis.text.y = element_text(size = 12, color = "black"),
+        axis.title.x = element_text(size = 15, margin = margin(t = 10)),
+        axis.title.y = element_text(size = 15, margin = margin(r = 8)),
+        
+        # Plot
+        plot.title = element_text(hjust = 0.5, size = 18),
+        plot.margin = unit(c(0.3, 0.3, 0.3, 0.3), "cm"),
+        plot.background = element_rect(colour = "transparent"),
+        
+        # Panel
+        panel.background = element_rect(fill = "transparent"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        
+        # Legend
+        legend.position = c(1, 1),
+        legend.spacing.x = unit(0.2, "cm"),
+        legend.key.width = unit(1.5, "cm"),
+        legend.key.size = unit(1.2, "line"),
+        legend.key = element_blank(),
+        legend.text = element_text(size = 10, margin = margin(0, 10, 0, -5)),
+        legend.text.align = 0,
+        legend.box.just = "center",
+        legend.justification = c(0.5, 0.5),
+        legend.title.align = 0.5,
+        legend.background = element_rect(fill = "transparent"),
+        
+        # Facet strip
+        strip.background = element_rect(fill = "transparent"),
+        strip.text = element_text(size = 12, hjust = 0.5)
+        )
+
+
+# Import files ------------------------------------------------------------
+model_out_clean <- readRDS("Output/Data_clean/model_out_clean.rds")
+Abd_2017 <- read_csv("Data_raw/arthropod_abd_2017.csv")
+Abd_2018 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 1)
+Abd_2019 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 2)
+
+
+# Code starts here ---------------------------------------------------------
+
+### Line charts of dietary proportions for all predators, spiders, and ladybeetles
+# Create a dataframe for panel labels
+label1 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider", "Ladybeetle"),
+                     Farmtype = c("Or", "Or", "Or", "Cv", "Cv", "Cv"),   
+                     Source = rep("Rice_herb", 6), 
+                     x = c(1, 1, 1, 1, 1, 1), 
+                     y = c(1.075, 1.075, 1.075, 1, 1, 1),
+                     Label = c("(a)", "(b)", "(c)", "", "", "")) %>%
+  mutate(Predator = factor(Predator, levels = unique(Predator), ordered = T),
+         Farmtype = factor(Farmtype, levels = unique(Farmtype), ordered = T))
+
+model_out_clean %>% 
+  group_by(Predator, Farmtype, Stage, Source) %>%
+  summarise(Proportion = mean(Mean, na.rm = T),
+            n = n(),
+            SD = sd(Mean),
+            SE = SD/sqrt(n)) %>%
+  ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) + 
+  geom_errorbar(aes(ymin = Proportion - SE, ymax = Proportion + SE), 
+                position = position_dodge(0.1), 
+                width = 0.3) +
+  facet_grid(Predator~Farmtype, labeller = as_labeller(c("Or" = "Organic", 
+                                                         "Cv" = "Conventional",
+                                                         "All" = "All predators",
+                                                         "Spider" = "Spiders",
+                                                         "Ladybeetle" = "Ladybeetles"))) + 
+  geom_text(data = label1, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(ylim = c(0, 1), clip = "off") +
+  xlab("Crop stage") +
+  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(1.5, "lines"),
+        legend.direction = "horizontal",
+        legend.position = "top",
+        strip.background.y = element_rect(fill = "grey80"))
+ 
+ggsave("Output/Figures/Diet_proportion.tiff", width = 7, height = 8, dpi = 600)
+
+# 2017
+label1 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider", "Ladybeetle"),
+                     Farmtype = c("Or", "Or", "Or", "Cv", "Cv", "Cv"),   
+                     Source = rep("Rice_herb", 6), 
+                     x = c(1, 1, 1, 1, 1, 1), 
+                     y = c(1.075, 1.075, 1.075, 1, 1, 1),
+                     Label = c("(a)", "(b)", "(c)", "", "", "")) %>%
+  mutate(Predator = factor(Predator, levels = unique(Predator), ordered = T),
+         Farmtype = factor(Farmtype, levels = unique(Farmtype), ordered = T))
+
+model_out_clean %>% 
+  filter(Year == 2017) %>%
+  group_by(Predator, Farmtype, Stage, Source) %>%
+  summarise(Proportion = mean(Mean, na.rm = T),
+            n = n(),
+            SD = sd(Mean),
+            SE = SD/sqrt(n)) %>%
+  ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) + 
+  geom_errorbar(aes(ymin = Proportion - SE, ymax = Proportion + SE), 
+                position = position_dodge(0.1), 
+                width = 0.3) +
+  facet_grid(Predator~Farmtype, labeller = as_labeller(c("Or" = "Organic", 
+                                                         "Cv" = "Conventional",
+                                                         "All" = "All predators",
+                                                         "Spider" = "Spiders",
+                                                         "Ladybeetle" = "Ladybeetles"))) + 
+  geom_text(data = label1, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(ylim = c(0, 1), clip = "off") +
+  xlab("Crop stage") +
+  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(1.5, "lines"),
+        legend.direction = "horizontal",
+        legend.position = "top",
+        strip.background.y = element_rect(fill = "grey80"),
+        legend.margin = margin(b = -5),
+        plot.title = element_text(hjust = 0.5, size = 16, margin = margin(b = 5))) + 
+  labs(title = "2017")
+
+ggsave("Output/Figures/Diet_proportion_2017.tiff", width = 7, height = 8, dpi = 600)
+
+# 2018
+label2 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider", "Ladybeetle"),
+                     Farmtype = c("Or", "Or", "Or", "Cv", "Cv", "Cv"),   
+                     Source = rep("Rice_herb", 6), 
+                     x = c(1, 1, 1, 1, 1, 1), 
+                     y = c(1.075, 1.075, 1.075, 1, 1, 1),
+                     Label = c("(d)", "(e)", "(f)", "", "", "")) %>%
+  mutate(Predator = factor(Predator, levels = unique(Predator), ordered = T),
+         Farmtype = factor(Farmtype, levels = unique(Farmtype), ordered = T))
+
+model_out_clean %>% 
+  filter(Year == 2018) %>%
+  group_by(Predator, Farmtype, Stage, Source) %>%
+  summarise(Proportion = mean(Mean, na.rm = T),
+            n = n(),
+            SD = sd(Mean),
+            SE = SD/sqrt(n)) %>%
+  ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) + 
+  geom_errorbar(aes(ymin = Proportion - SE, ymax = Proportion + SE), 
+                position = position_dodge(0.1), 
+                width = 0.3) +
+  facet_grid(Predator~Farmtype, labeller = as_labeller(c("Or" = "Organic", 
+                                                         "Cv" = "Conventional",
+                                                         "All" = "All predators",
+                                                         "Spider" = "Spiders",
+                                                         "Ladybeetle" = "Ladybeetles"))) + 
+  geom_text(data = label2, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(ylim = c(0, 1), clip = "off") +
+  xlab("Crop stage") +
+  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(1.5, "lines"),
+        legend.direction = "horizontal",
+        legend.position = "top",
+        strip.background.y = element_rect(fill = "grey80"),
+        legend.margin = margin(b = -5),
+        plot.title = element_text(hjust = 0.5, size = 16, margin = margin(b = 5))) + 
+  labs(title = "2018")
+
+ggsave("Output/Figures/Diet_proportion_2018.tiff", width = 7, height = 8, dpi = 600)
+
+# 2019
+label3 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider", "Ladybeetle"),
+                     Farmtype = c("Or", "Or", "Or", "Cv", "Cv", "Cv"),   
+                     Source = rep("Rice_herb", 6), 
+                     x = c(1, 1, 1, 1, 1, 1), 
+                     y = c(1.075, 1.075, 1.075, 1, 1, 1),
+                     Label = c("(g)", "(h)", "(i)", "", "", "")) %>%
+  mutate(Predator = factor(Predator, levels = unique(Predator), ordered = T),
+         Farmtype = factor(Farmtype, levels = unique(Farmtype), ordered = T))
+
+model_out_clean %>% 
+  filter(Year == 2019) %>%
+  group_by(Predator, Farmtype, Stage, Source) %>%
+  summarise(Proportion = mean(Mean, na.rm = T),
+            n = n(),
+            SD = sd(Mean),
+            SE = SD/sqrt(n)) %>%
+  ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) + 
+  geom_errorbar(aes(ymin = Proportion - SE, ymax = Proportion + SE), 
+                position = position_dodge(0.1), 
+                width = 0.3) +
+  facet_grid(Predator~Farmtype, labeller = as_labeller(c("Or" = "Organic", 
+                                                         "Cv" = "Conventional",
+                                                         "All" = "All predators",
+                                                         "Spider" = "Spiders",
+                                                         "Ladybeetle" = "Ladybeetles"))) + 
+  geom_text(data = label3, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(ylim = c(0, 1), clip = "off") +
+  xlab("Crop stage") +
+  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(1.5, "lines"),
+        legend.direction = "horizontal",
+        legend.position = "top",
+        strip.background.y = element_rect(fill = "grey80"),
+        legend.margin = margin(b = -5),
+        plot.title = element_text(hjust = 0.5, size = 16, margin = margin(b = 5))) + 
+  labs(title = "2019")
+
+ggsave("Output/Figures/Diet_proportion_2019.tiff", width = 7, height = 8, dpi = 600)
+
+model_out_clean %>% 
+  group_by(Year, Farmtype, Stage, Predator, Source) %>%
+  summarise(Proportion = mean(Mean, na.rm = T),
+            Proportion = round(Proportion, 2),
+            n = n(),
+            SD = sd(Mean),
+            SE = SD/sqrt(n),
+            SE = round(SE, 2)) %>%
+  ungroup() %>%
+  mutate(Proportion2 = ifelse(!is.na(SE), paste(Proportion, "±", SE), Proportion)) %>%
+  select(-Proportion, -SD, -SE) %>%
+  pivot_wider(names_from = Source, values_from = Proportion2) %>%
+  relocate(n, .after = Detritivore) %>%
+  write_csv("Output/Data_clean/Proportion.csv")
+
+
+
+### Line charts of rice herbivore consumption by all predators, spiders, and ladybeetles
+label2 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider", "Ladybeetle"),
+                     Farmtype = c("Or", "Or", "Or", "Cv", "Cv", "Cv"),   
+                     Year = "2017", 
+                     x = c(1, 1, 1, 1, 1, 1), 
+                     y = c(1.075, 1.075, 1.075, 1, 1, 1),
+                     Label = c("(a)", "(b)", "(c)", "", "", "")) %>%
+  mutate(Predator = factor(Predator, levels = unique(Predator), ordered = T),
+         Farmtype = factor(Farmtype, levels = unique(Farmtype), ordered = T))
+
+model_out_clean %>% 
+  filter(Source == "Rice_herb") %>%
+  group_by(Predator, Farmtype, Stage, Year) %>%
+  summarise(Proportion = mean(Mean, na.rm = T)) %>%
+  ggplot(aes(x = Stage, y = Proportion, linetype = Year, shape = Year, color = Year, group = Year)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) + 
+  facet_grid(Predator~Farmtype, labeller = as_labeller(c("Or" = "Organic", 
+                                                         "Cv" = "Conventional",
+                                                         "All" = "All predators",
+                                                         "Spider" = "Spiders",
+                                                         "Ladybeetle" = "Ladybeetles"))) + 
+  geom_text(data = label2, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(ylim = c(0, 1), clip = "off") +
+  xlab("Crop stage") +
+  ylab("Proportion of rice herbivores consumed in the diet") +
+  scale_color_manual(values = c("#00BA38", "#00BA38", "#00BA38"), 
+                     labels = c("2017", "2018", "2019"), 
+                     name = "") +
+  scale_shape_manual(values = c(16, 16, 16), 
+                     labels = c("2017", "2018", "2019"), 
+                     name = "") +
+  scale_linetype_manual(values = c(6, 2, 1),
+                        labels = c("2017", "2018", "2019"), 
+                        name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(1.5, "lines"),
+        legend.direction = "horizontal",
+        legend.position = "top",
+        strip.background.y = element_rect(fill = "grey80"))
+
+ggsave("Output/Figures/Rice_herb_consumption.tiff", width = 7, height = 8, dpi = 600)
+
+
+### Line charts of relative abundance of prey sources over crop stages
+# Clean the datasets
+Abd_2017_clean <- Abd_2017 %>% 
+  select(1:4) %>%
+  mutate(Year = 2017) %>%
+  mutate(Crop_stage = factor(Stage, levels = c("Seedling", "Tillering", "Flowering", "Ripening"), ordered = T)) %>%
+  mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
+  mutate(Farm_type = plyr::mapvalues(Farm_type, from = c("O", "C"), to = c("Organic", "Conventional"))) %>%
+  mutate(Farm_type = factor(Farm_type, levels = c("Organic", "Conventional"), ordered = T)) %>%
+  mutate(Trophic = fct_collapse(Family.ID,
+                                Rice_herb = c("Del", "Cic", "Pen", "Aly", "Lyg", "Pyr", "Hes", "Pyl"),
+                                Tourist_herb = c("Acr", "Chr"),
+                                Detritivore = c("Chi", "Sci", "Mus", "Eph", "Emp", "Str", "Chl", "Ter"),
+                                Predator = c("Ara", "Coc", "Tet"),
+                                other_level = "Others")) %>%
+  mutate(Trophic = factor(Trophic, levels = c("Predator", "Rice_herb", "Tourist_herb", "Detritivore", "Others"), ordered = T)) %>%
+  select(Year, Farm_type, Crop_stage, Trophic, Count)
+
+Abd_2018_clean <- Abd_2018 %>%
+  select(1:4) %>%
+  mutate(Year = 2018) %>%
+  mutate(Crop_stage = plyr::mapvalues(Date, from = c("20180402", "20180506", "20180608", "20180629"), to = c("Seedling", "Tillering", "Flowering", "Ripening"))) %>%
+  mutate(Crop_stage = factor(Crop_stage, levels = c("Seedling", "Tillering", "Flowering", "Ripening"), ordered = T)) %>%
+  mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
+  mutate(Farm_type = plyr::mapvalues(Farm_type, from = c("O", "C"), to = c("Organic", "Conventional"))) %>%
+  mutate(Farm_type = factor(Farm_type, levels = c("Organic", "Conventional"), ordered = T)) %>%
+  mutate(Trophic = fct_collapse(Family.abbr.,
+                                Rice_herb = c("Del", "Cic", "Pen", "Aly", "Lyg", "Pyr", "Hes", "Pyl"),
+                                Tourist_herb = c("Acr", "Chr"),
+                                Detritivore = c("Chi", "Sci", "Mus", "Eph", "Emp", "Str", "Chl", "Ter"),
+                                Predator = c("Ara", "Coc", "Tet"),
+                                other_level = "Others")) %>%
+  mutate(Trophic = factor(Trophic, levels = c("Predator", "Rice_herb", "Tourist_herb", "Detritivore", "Others"), ordered = T)) %>%
+  select(Year, Farm_type, Crop_stage, Trophic, Count = Abundance)
+
+Abd_2019_clean <- Abd_2019 %>%
+  select(1:4) %>%
+  mutate(Year = 2019) %>%
+  mutate(Family.abbr. = str_to_title(Family.abbr.)) %>%
+  mutate(Crop_stage = plyr::mapvalues(Date, from = c("20190513", "20190620", "20190702"), to = c("Tillering", "Flowering", "Ripening"))) %>%
+  mutate(Crop_stage = factor(Crop_stage, levels = c("Seedling", "Tillering", "Flowering", "Ripening"), ordered = T)) %>%
+  mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
+  mutate(Farm_type = plyr::mapvalues(Farm_type, from = c("O", "C"), to = c("Organic", "Conventional"))) %>%
+  mutate(Farm_type = factor(Farm_type, levels = c("Organic", "Conventional"), ordered = T)) %>%
+  mutate(Trophic = fct_collapse(Family.abbr.,
+                                Rice_herb = c("Del", "Cic", "Pen", "Aly", "Lyg", "Pyr", "Hes", "Pyl"),
+                                Tourist_herb = c("Acr", "Chr"),
+                                Detritivore = c("Chi", "Sci", "Mus", "Eph", "Emp", "Str", "Chl", "Ter"),
+                                Predator = c("Ara", "Coc", "Tet"),
+                                other_level = "Others")) %>%
+  mutate(Trophic = factor(Trophic, levels = c("Predator", "Rice_herb", "Tourist_herb", "Detritivore", "Others"), ordered = T)) %>%
+  select(Year, Farm_type, Crop_stage, Trophic, Count = Abundance)
+
+Abd_all <- bind_rows(Abd_2017_clean, Abd_2018_clean, Abd_2019_clean) %>%
+  na.omit()
+
+
+# Plot
+label1 <- data.frame(Year = c(2017, 2018, 2019, 2017, 2018, 2019),
+                     Farm_type = c("Organic", "Organic", "Organic", "Conventional", "Conventional", "Conventional"),   
+                     Trophic = rep("Rice_herb", 6), 
+                     x = c(1, 1, 1, 1, 1, 1), 
+                     y = c(1.075, 1.075, 1.075, 1, 1, 1),
+                     Label = c("(a)", "(b)", "(c)", "", "", "")) %>%
+  mutate(Year = factor(Year, levels = unique(Year), ordered = T),
+         Farm_type = factor(Farm_type, levels = unique(Farm_type), ordered = T))
+
+Abd_all %>% 
+  filter(Trophic %in% c("Rice_herb", "Tourist_herb", "Detritivore")) %>%
+  dplyr::group_by(Year, Farm_type, Crop_stage, Trophic) %>%
+  dplyr::summarise(n = sum(Count)) %>%
+  dplyr::mutate(Proportion = n/sum(n)) %>%
+  ggplot(aes(x = Crop_stage, y = Proportion, color = Trophic, shape = Trophic, group = Trophic)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) +
+  facet_grid(Year~Farm_type) + 
+  geom_text(data = label1, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(ylim = c(0, 1), clip = "off") +
+  xlab("Crop stage") +
+  ylab("Relative abundances of prey sources") +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(1.5, "lines"),
+        legend.direction = "horizontal",
+        legend.position = "top",
+        strip.background.y = element_rect(fill = "grey80"))
+
+ggsave("Output/Figures/Rel_abd.tiff", width = 7, height = 8, dpi = 600)
+
+
+
+
+
+
