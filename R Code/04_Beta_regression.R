@@ -30,7 +30,7 @@ library(car)
 # Import files ------------------------------------------------------------
 model_out_clean <- readRDS("Output/Data_clean/model_out_clean.rds")
 forest_cover <- read_csv("Data_raw/forest_cover.csv")
-arthropod_abd_2017_raw <- read_csv("Data_raw/arthropod_abd_2017.csv")
+arthropod_abd_2017_raw <- read_csv("Data_raw/arthropod_abd_2017.csv", locale = locale(encoding = "latin1"))
 arthropod_abd_2018_raw <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheet = 1)
 arthropod_abd_2019_raw <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheet = 2)  
 
