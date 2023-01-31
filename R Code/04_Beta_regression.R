@@ -273,6 +273,10 @@ multcomp_stage_ladybeetles <- emmeans(beta_out_ladybeetles2, ~Stage) %>%
   multcomp::cld(alpha = 0.05, Letters = letters, adjusj = "tukey")
 
 
-
-
+### Three-year average of pest consumption in organic and conventional farms
+model_out_clean %>% 
+  filter(Predator == "All" & Source == "Rice_herb") %>% 
+  group_by(Farmtype) %>% 
+  summarise(mean_prop = mean(Mean))
+  
 
