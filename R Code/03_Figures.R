@@ -21,6 +21,7 @@ set.seed(123)
 library(tidyverse)
 library(magrittr)
 library(xlsx)
+library(readxl)
 
 
 # ggplot theme -----------------------------------------------------------
@@ -65,7 +66,7 @@ my_theme <-
 
 # Import files ------------------------------------------------------------
 model_out_clean <- readRDS("Output/Data_clean/model_out_clean.rds")
-Abd_2017 <- read_csv("Data_raw/arthropod_abd_2017.csv")
+Abd_2017 <- read.xlsx("Data_raw/arthropod_abd_2017.xlsx", sheetIndex = 1)
 Abd_2018 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 1)
 Abd_2019 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 2)
 
@@ -413,7 +414,97 @@ Abd_all %>%
 ggsave("Output/Figures/Rel_abd.tiff", width = 7, height = 8, dpi = 600)
 
 
+### Line charts of the abundance of predators over crop stages
+# Clean the datasets
+Abd_2017_clean_predator <- Abd_2017 %>% 
+  select(1:4) %>%
+  mutate(Year = 2017) %>%
+  mutate(Crop_stage = factor(Stage, levels = c("Seedling", "Tillering", "Flowering", "Ripening"), ordered = T)) %>%
+  mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
+  mutate(Farm_type = plyr::mapvalues(Farm_type, from = c("O", "C"), to = c("Organic", "Conventional"))) %>%
+  mutate(Farm_type = factor(Farm_type, levels = c("Organic", "Conventional"), ordered = T)) %>%
+  mutate(Trophic = fct_collapse(Family.ID, 
+                                Spider = c("Ara", "Tet"),
+                                Ladybeetle = "Coc", 
+                                other_level = "Others")) %>%
+  mutate(Trophic = factor(Trophic, levels = c("Spider", "Ladybeetle", "Others"), ordered = T)) %>%
+  select(Year, Farm_type, Crop_stage, Trophic, Count)
 
+Abd_2018_clean_predator <- Abd_2018 %>%
+  select(1:4) %>%
+  mutate(Year = 2018) %>%
+  mutate(Crop_stage = plyr::mapvalues(Date, from = c("20180402", "20180506", "20180608", "20180629"), to = c("Seedling", "Tillering", "Flowering", "Ripening"))) %>%
+  mutate(Crop_stage = factor(Crop_stage, levels = c("Seedling", "Tillering", "Flowering", "Ripening"), ordered = T)) %>%
+  mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
+  mutate(Farm_type = plyr::mapvalues(Farm_type, from = c("O", "C"), to = c("Organic", "Conventional"))) %>%
+  mutate(Farm_type = factor(Farm_type, levels = c("Organic", "Conventional"), ordered = T)) %>%
+  mutate(Trophic = fct_collapse(Family.abbr.,
+                                Spider = c("Ara", "Tet"),
+                                Ladybeetle = "Coc", 
+                                other_level = "Others")) %>%
+  mutate(Trophic = factor(Trophic, levels = c("Spider", "Ladybeetle", "Others"), ordered = T)) %>%
+  select(Year, Farm_type, Crop_stage, Trophic, Count = Abundance)
+
+Abd_2019_clean_predator <- Abd_2019 %>%
+  select(1:4) %>%
+  mutate(Year = 2019) %>%
+  mutate(Family.abbr. = str_to_title(Family.abbr.)) %>%
+  mutate(Crop_stage = plyr::mapvalues(Date, from = c("20190513", "20190620", "20190702"), to = c("Tillering", "Flowering", "Ripening"))) %>%
+  mutate(Crop_stage = factor(Crop_stage, levels = c("Seedling", "Tillering", "Flowering", "Ripening"), ordered = T)) %>%
+  mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
+  mutate(Farm_type = plyr::mapvalues(Farm_type, from = c("O", "C"), to = c("Organic", "Conventional"))) %>%
+  mutate(Farm_type = factor(Farm_type, levels = c("Organic", "Conventional"), ordered = T)) %>%
+  mutate(Trophic = fct_collapse(Family.abbr.,
+                                Spider = c("Ara", "Tet"),
+                                Ladybeetle = "Coc", 
+                                other_level = "Others")) %>%
+  mutate(Trophic = factor(Trophic, levels = c("Spider", "Ladybeetle", "Others"), ordered = T)) %>%
+  select(Year, Farm_type, Crop_stage, Trophic, Count = Abundance)
+
+Abd_all_predator <- bind_rows(Abd_2017_clean_predator, 
+                              Abd_2018_clean_predator, 
+                              Abd_2019_clean_predator) %>%
+  na.omit()
+
+
+# Plot
+label2 <- data.frame(Year = c(2017, 2018, 2019, 2017, 2018, 2019),
+                     Farm_type = c("Organic", "Organic", "Organic", "Conventional", "Conventional", "Conventional"),   
+                     Trophic = rep("Spider", 6), 
+                     x = c(1, 1, 1, 1, 1, 1), 
+                     y = c(3, 5, 20, 3, 5, 20),
+                     Label = c("(a)", "(b)", "(c)", "", "", "")) %>%
+  mutate(Year = factor(Year, levels = unique(Year), ordered = T),
+         Farm_type = factor(Farm_type, levels = unique(Farm_type), ordered = T))
+
+Abd_all_predator %>% 
+  filter(Trophic %in% c("Spider", "Ladybeetle")) %>%
+  mutate(Year = factor(Year, levels = unique(Year), ordered = T)) %>% 
+  dplyr::group_by(Year, Farm_type, Crop_stage, Trophic) %>%
+  dplyr::summarise(n_predator = sum(Count),
+                   n_farm = n(),
+                   mean = mean(Count),
+                   SD = sd(Count),
+                   SE = SD/sqrt(n_farm)) %>%
+  ggplot(aes(x = Crop_stage, y = mean, color = Trophic, shape = Trophic, group = Trophic)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) +
+  facet_grid(Year~Farm_type, scales = "free_y") + 
+  geom_text(data = label2, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(clip = "off") +
+  xlab("Crop stage") +
+  ylab("Number of predators (mean SE)") +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(1.5, "lines"),
+        legend.direction = "horizontal",
+        legend.position = "top",
+        strip.background.y = element_rect(fill = "grey80"))
+
+ggsave("Output/Figures/abd_predator.tiff", width = 7, height = 8, dpi = 600)
 
 
 
