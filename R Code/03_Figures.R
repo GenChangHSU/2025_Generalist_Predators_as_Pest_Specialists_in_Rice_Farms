@@ -9,6 +9,7 @@
 ## 1. Line charts of dietary proportions of predators as a whole, spiders, and ladybeetles.
 ## 2. Line charts of rice herbivore consumption by predators as a whole, spiders, and ladybeetles.
 ## 3. Line charts of relative abundances of prey sources over crop stages.
+## 4. Line charts of mean number of predators over crop stages.
 ##
 ## Notes:
 ##
@@ -472,7 +473,7 @@ label2 <- data.frame(Year = c(2017, 2018, 2019, 2017, 2018, 2019),
                      Farm_type = c("Organic", "Organic", "Organic", "Conventional", "Conventional", "Conventional"),   
                      Trophic = rep("Spider", 6), 
                      x = c(1, 1, 1, 1, 1, 1), 
-                     y = c(3, 5, 20, 3, 5, 20),
+                     y = c(6, 8, 30, 6, 8, 30),
                      Label = c("(a)", "(b)", "(c)", "", "", "")) %>%
   mutate(Year = factor(Year, levels = unique(Year), ordered = T),
          Farm_type = factor(Farm_type, levels = unique(Farm_type), ordered = T))
@@ -489,14 +490,18 @@ Abd_all_predator %>%
   ggplot(aes(x = Crop_stage, y = mean, color = Trophic, shape = Trophic, group = Trophic)) +
   geom_line(position = position_dodge(0.1), size = 1.2) +
   geom_point(position = position_dodge(0.1), size = 3) +
+  geom_errorbar(aes(x = Crop_stage, ymin = mean-SE, ymax = mean+SE, color = Trophic), 
+                position = position_dodge(0.1), inherit.aes = F,
+                width = 0.35, size = 0.8) + 
   facet_grid(Year~Farm_type, scales = "free_y") + 
-  geom_text(data = label2, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  geom_text(data = label2, aes(x = x, y = y, label = Label), 
+            size = 5, color = "black", nudge_x = -0.5, vjust = -0.7) +
   coord_cartesian(clip = "off") +
   xlab("Crop stage") +
-  ylab("Number of predators (mean SE)") +
-  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
-  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
-  scale_y_continuous(expand = c(0, 0)) +
+  ylab("Number of predators (mean ± SE)") +
+  scale_color_manual(values = c("#009E73", "#E69F00"), labels = c("Spiders", "Ladybeetles"), name = "") +
+  scale_shape_manual(values = c(16, 15), labels = c("Spiders", "Ladybeetles"), name = "") +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
   my_theme + 
   theme(panel.spacing.x = unit(0, "lines"),
         panel.spacing.y = unit(1.5, "lines"),
