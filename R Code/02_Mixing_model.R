@@ -1,33 +1,35 @@
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ## Title: Bayesian Stable Isotope Mixing Model with MixSIAR
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2021-03-09
+## Date: 2023-04-27
 ##
-## Description: Estimate diet compositions of predators using 
-## Bayesian stable isotope mixing models.
-##
-## Notes:
-##
-##
-## ------------------------------------------------------------------------
+## Description: 
+## 1. Assign arthropod families into different trophic guilds
+## 2. Prepare consumer data for the mixing model
+## 3. Prepare source data for the mixing model
+## 4. Prepare C and N trophic discrimination factors
+## 5. Run the mixing models using JAGS
+## 6. Organize the raw mixing model outputs
+## 
+## -----------------------------------------------------------------------------
 set.seed(123)
 
 
-# Libraries ---------------------------------------------------------------
+# Libraries --------------------------------------------------------------------
 library(tidyverse)
 library(magrittr)
 library(MixSIAR)
 
 
-# Import files ------------------------------------------------------------
+# Import files -----------------------------------------------------------------
 SID_all_clean <- readRDS("Output/Data_clean/SID_all_clean.rds")
 
 
-# Code starts here ---------------------------------------------------------
+############################### Code starts here ###############################
 
-### Assign arthropod families into different trophic guilds
+# 1. Trophic guild assignment --------------------------------------------------
 predator <- c("ARA", "TET", "COC")
 spider <- c("ARA", "TET")
 ladybeetle <- c("COC")
@@ -55,7 +57,8 @@ tour_herb_data <- SID_all_clean %>%
 detritivore_data <- SID_all_clean %>%
   filter(Family %in% detritivore)
 
-### Prepare consumer (mixture) data
+
+# 2. Preparation of consumer data ----------------------------------------------
 mixture_predator <- 
   data.frame(d13C = predator_data$d13C,
              d15N = predator_data$d15N,
@@ -79,28 +82,28 @@ write.csv(mixture_spider, "Output/Data_clean/mixture_spider.csv", row.names = FA
 write.csv(mixture_ladybeetle, "Output/Data_clean/mixture_ladybeetle.csv", row.names = FALSE)
 
 mix_siar_predator <- load_mix_data(filename = "Output/Data_clean/mixture_predator.csv",
-                              iso_names = c("d13C","d15N"),
-                              factors = c("Farm", "Stage"),
-                              fac_random = c(F, F),
-                              fac_nested = c(F, F),
-                              cont_effects = NULL)
+                                   iso_names = c("d13C","d15N"),
+                                   factors = c("Farm", "Stage"),
+                                   fac_random = c(F, F),
+                                   fac_nested = c(F, F),
+                                   cont_effects = NULL)
 
 mix_siar_spider <- load_mix_data(filename = "Output/Data_clean/mixture_spider.csv",
-                            iso_names = c("d13C","d15N"),
-                            factors = c("Farm", "Stage"),
-                            fac_random = c(F, F),
-                            fac_nested = c(F, F),
-                            cont_effects = NULL)
+                                 iso_names = c("d13C","d15N"),
+                                 factors = c("Farm", "Stage"),
+                                 fac_random = c(F, F),
+                                 fac_nested = c(F, F),
+                                 cont_effects = NULL)
 
 mix_siar_ladybeetle <- load_mix_data(filename = "Output/Data_clean/mixture_ladybeetle.csv",
-                                iso_names = c("d13C","d15N"),
-                                factors = c("Farm", "Stage"),
-                                fac_random = c(F, F),
-                                fac_nested = c(F, F),
-                                cont_effects = NULL)
+                                     iso_names = c("d13C","d15N"),
+                                     factors = c("Farm", "Stage"),
+                                     fac_random = c(F, F),
+                                     fac_nested = c(F, F),
+                                     cont_effects = NULL)
 
 
-### Prepare source (prey) data
+# 3. Preparation of source data ------------------------------------------------
 source <- list(rice_herb_data, tour_herb_data, detritivore_data) %>% 
   map(., function(x){
     select(x, d13C, d15N, Concd13C = C_conc, Concd15N = N_conc, Farm)
@@ -129,8 +132,9 @@ source_mix_siar_ladybeetle <- load_source_data(filename = "Output/Data_clean/sou
                                            mix_siar_ladybeetle)
 
 
-### Trophic discrimination factors
-# Diet-Dependent Discrimination Factor (DDDF) from Caut et al. (2009)
+
+# 4. Preparation of C and N trophic discrimination factors ---------------------
+### Diet-Dependent Discrimination Factor (DDDF) from Caut et al. (2009)
 TDF_C_fun <- function(x){-0.113*x - 1.916}
 TDF_N_fun <- function(x){-0.311*x + 4.065}
 
@@ -146,8 +150,8 @@ discr_mix_siar_spider <- load_discr_data(filename = "Output/Data_clean/TDF.csv",
 discr_mix_siar_ladybeetle <- load_discr_data(filename = "Output/Data_clean/TDF.csv", mix_siar_ladybeetle)
 
 
-### Mixing model using JAGS
-# Write JAGS files
+# 5. Run the mixing models using JAGS -------------------------------------------
+### Write JAGS files
 dr <- getwd()
 setwd(dir = paste0(dr, "/Output/JAGS"))
 
@@ -157,7 +161,7 @@ write_JAGS_model("JAGS_predator.txt", resid_err, process_err, mix_siar_predator,
 write_JAGS_model("JAGS_spider.txt", resid_err, process_err, mix_siar_spider, source_mix_siar_spider)
 write_JAGS_model("JAGS_ladybeetle.txt", resid_err, process_err, mix_siar_ladybeetle, source_mix_siar_ladybeetle)
 
-# Run JAGS files
+### Run JAGS files
 jags_predator <- run_model(run = "short", 
                            mix_siar_predator, 
                            source_mix_siar_predator, 
@@ -185,7 +189,7 @@ jags_ladybeetle <- run_model(run = "short",
                              resid_err, 
                              process_err)
 
-# Evaluate JAGS output
+### Evaluate JAGS outputs
 setwd("./Output/JAGS")
 options(max.print = 1000000)
 
@@ -258,7 +262,17 @@ output_JAGS(jags_ladybeetle, mix_siar_ladybeetle, source_mix_siar_ladybeetle,
 setwd("../..")
 
 
-### Organize raw mixing model output
+
+
+
+
+
+
+
+
+
+
+# 6. Organize the raw mixing model outputs -------------------------------------
 model_out_predator_raw <- read.table("Output/JAGS/model_out_predator.txt", header = F, fill = TRUE)
 model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], model_out_predator_raw[290:571, 3]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%

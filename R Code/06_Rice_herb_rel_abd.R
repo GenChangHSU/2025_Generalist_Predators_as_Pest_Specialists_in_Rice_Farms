@@ -3,12 +3,11 @@
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2021-10-18
+## Date: 2023-04-27
 ##
 ## Description: 
-##   (1) Summarize the relative abundances of the rice herbivore families/genera
-##       at the flowering and ripening stage in the three study years
-##
+## 1. Summarize the relative abundances of the rice herbivore families/genera
+##    at the flowering and ripening stage in the three study years
 ##
 ## -----------------------------------------------------------------------------
 set.seed(123)
@@ -29,7 +28,8 @@ Abd_2019 <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheet = 2)
 
 ############################### Code starts here ###############################
 
-### Rice herbivore families in the study years
+# 1. Summarize the relative abundances of rice herbivore families --------------
+### Rice herbivore families in the three study years
 Rice_family_2017 <- c("Cic", "Del", "Lyg", "Pen", "Hes", "Pyl", "Nym")
 Rice_family_2018 <- c("Cic", "Del", "Lyg", "Pen", "Hes", "Pyl", "Pyr", "Aly")
 Rice_family_2019 <- c("Cic", "Del", "Lyg", "Pen", "Hes", "Pyl", "Pyr", "Aly",
@@ -46,7 +46,6 @@ Rice_herb_data_2017 <- Abd_2017 %>%
   filter(Stage %in% c("Flowering", "Ripening")) %>%
   mutate(Year = as.factor(Year))
   
-
 Rice_herb_data_2018 <- Abd_2018 %>% 
   mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
   mutate(Farm_type = plyr::mapvalues(Farm_type, from = c("O", "C"), to = c("Organic", "Conventional"))) %>%
@@ -61,7 +60,6 @@ Rice_herb_data_2018 <- Abd_2018 %>%
   mutate(Stage = case_when(Date == "0608" ~ "Flowering",
                            Date == "0629" ~ "Ripening")) %>%
   select(Year, Farm_type, Stage, Family = Family.abbr, Count = Abundance)
-
 
 Rice_herb_data_2019 <- Abd_2019 %>% 
   mutate(Farm_type = str_sub(Farm, start = 2, end = 2)) %>%
@@ -78,7 +76,6 @@ Rice_herb_data_2019 <- Abd_2019 %>%
   mutate(Stage = case_when(Date == "0620" ~ "Flowering",
                            Date == "0702" ~ "Ripening")) %>%
   select(Year, Farm_type, Stage, Family = Family.abbr, Count = Abundance, )
-
 
 bind_rows(Rice_herb_data_2017, 
           Rice_herb_data_2018,

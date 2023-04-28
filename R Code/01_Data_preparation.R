@@ -1,35 +1,32 @@
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ## Title: Data Preparation
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2021-03-09
+## Date: 2023-04-27
 ##
-## Description: Tidy up the three years of stable isotope datasets
+## Description: 
+## 1. Organize three years of stable isotpe data sets into an uniform format
 ##
-##
-## Notes:
-##
-##
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 set.seed(123)
 
 
-# Libraries ---------------------------------------------------------------
+# Libraries --------------------------------------------------------------------
 library(tidyverse)
 library(magrittr)
 library(readxl)
 
 
-# Import files ------------------------------------------------------------
+# Import files -----------------------------------------------------------------
 SID_2017_raw <- read_csv("./Data_raw/SID_2017.csv")
 SID_2018_raw <- read_csv("./Data_raw/SID_2018.csv")
 SID_2019_raw <- read_csv("./Data_raw/SID_2019.csv")
 
 
-# Code starts here ---------------------------------------------------------
+############################### Code starts here ###############################
 
-### Reorganize the datasets into an uniform format
+# 1. Organize the data sets into an uniform format -----------------------------
 SID_2017 <- SID_2017_raw %>%
   filter(Trophic %in% c("Predator", "Herbivore", "Detritivore")) %>%
   unite("Farm_ID", Sur_env, Farm_type, sep = "", remove = F) %>%

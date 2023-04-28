@@ -1,15 +1,13 @@
 ## -----------------------------------------------------------------------------
-## Title: Daily mean temperature and precipitation of the study site
+## Title: Daily mean temperature and precipitation of the study sites
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2021-09-08
+## Date: 2023-04-27
 ##
 ## Description: 
-## 1. Plot the daily mean temperature and precipitation of the study site during 
+## 1. Plot the daily mean temperature and precipitation of the study sites during 
 ##    the first rice growth season in year 2017, 2018, and 2019
-##
-## Notes:
 ##
 ## -----------------------------------------------------------------------------
 set.seed(123)
@@ -31,7 +29,7 @@ weather_list <- map(file_names, function(x){
 })
 
 
-# ggplot theme -----------------------------------------------------------
+# ggplot theme -----------------------------------------------------------------
 my_theme <- 
   theme(# Axis
     axis.text.x = element_text(size = 12, color = "black"),
@@ -73,6 +71,7 @@ my_theme <-
 
 ############################### Code starts here ###############################
 
+# 1. Daily mean temperature and precipitation of the study sites ---------------
 ### Organize the data
 weather_data <- weather_list %>% 
   `names<-`(file_names) %>%
