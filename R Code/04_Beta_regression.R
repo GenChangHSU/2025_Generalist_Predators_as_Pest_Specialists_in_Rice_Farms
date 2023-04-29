@@ -1,23 +1,24 @@
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ## Title: Relationships between rice herbivore consumption by predators and 
 ##        various abiotic/biotic factors
+##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2021-03-12
+## Date: 2023-04-29
 ##
-## Description: Fit beta regression models to examine the relationships between 
-## the proportion of rice herbivore consumed in predators' diet and various 
-## abiotic (Farmtype, crop stage, year, surrounding forest cover) and biotic factors 
-## (relative abundance of rice herbivores) 
+## Description: 
+## 1. Prepare the abiotic and biotic factor data for beta regression models
+## 2. Fit beta regression models to examine the relationships between the 
+##    proportion of rice herbivores consumed in predators' diet and various 
+##    abiotic (farm type, crop stage, year, surrounding forest cover) and 
+##    biotic factors (relative abundance of rice herbivores)
 ##
-## Notes:
 ##
-##
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 set.seed(123)
 
 
-# Libraries ---------------------------------------------------------------
+# Libraries --------------------------------------------------------------------
 library(tidyverse)
 library(magrittr)
 library(readxl)
@@ -27,7 +28,7 @@ library(emmeans)
 library(car)
 
 
-# Import files ------------------------------------------------------------
+# Import files -----------------------------------------------------------------
 model_out_clean <- readRDS("Output/Data_clean/model_out_clean.rds")
 forest_cover <- read_csv("Data_raw/forest_cover.csv")
 arthropod_abd_2017_raw <- read.xlsx("Data_raw/arthropod_abd_2017.xlsx", sheetIndex = 1)
@@ -35,10 +36,10 @@ arthropod_abd_2018_raw <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", she
 arthropod_abd_2019_raw <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheet = 2)  
 
 
-# Code starts here ---------------------------------------------------------
+############################### Code starts here ###############################
 
-### Tidy up the arthropod abundance datasets
-# Prey guild assignment
+# 1. Prepare the abiotic and biotic factor data for beta regression models -----
+### Arthropod abundance data
 rice_herb <- c("DEL", "CIC", "PEN", "ALY", "LYG")
 tour_herb <- c("ACR", "CHR")
 detritivore <- c("CHI", "SCI", "MUS", "EPH", "EMP", "STR", "CHL", "TER")
@@ -103,12 +104,12 @@ arthropod_abd_clean <- bind_rows(arthropod_abd_2017_clean,
 
 write_rds(arthropod_abd_clean, "Output/Data_clean/arthropod_abd_clean.rds")
 
-
-### Merge diet proportion dataset, arthropod abundance dataset, and forest cover dataset
+### Combine dietary proportion, arthropod abundance, and forest cover data
 rice_herb_consmp_all <- model_out_clean %>%
   left_join(arthropod_abd_clean, by = c("Year", "Farm_ID", "Stage", "Source")) %>%
   left_join(forest_cover, by = "Farm_ID") %>%
-  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, Rel_abd, Source, Proportion = Mean) %>%
+  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, 
+         Rel_abd, Source, Proportion_mean = Mean, Proportion_median = `50%`) %>%
   arrange(Predator, Year, Farm_ID) %>%
   filter(Source == "Rice_herb" & Predator == "All") %>%
   mutate(Farmtype = factor(Farmtype, levels = c("Or", "Cv")),
@@ -117,7 +118,8 @@ rice_herb_consmp_all <- model_out_clean %>%
 rice_herb_consmp_spiders <- model_out_clean %>%
   left_join(arthropod_abd_clean, by = c("Year", "Farm_ID", "Stage", "Source")) %>%
   left_join(forest_cover, by = "Farm_ID") %>%
-  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, Rel_abd, Source, Proportion = Mean) %>%
+  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, 
+         Rel_abd, Source, Proportion_mean = Mean, Proportion_median = `50%`) %>%
   arrange(Predator, Year, Farm_ID) %>%
   filter(Source == "Rice_herb" & Predator == "Spider") %>%
   mutate(Farmtype = factor(Farmtype, levels = c("Or", "Cv")),
@@ -126,14 +128,19 @@ rice_herb_consmp_spiders <- model_out_clean %>%
 rice_herb_consmp_ladybeetles <- model_out_clean %>%
   left_join(arthropod_abd_clean, by = c("Year", "Farm_ID", "Stage", "Source")) %>%
   left_join(forest_cover, by = "Farm_ID") %>%
-  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, Rel_abd, Source, Proportion = Mean) %>%
+  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, 
+         Rel_abd, Source, Proportion_mean = Mean, Proportion_median = `50%`) %>%
   arrange(Predator, Year, Farm_ID) %>%
   filter(Source == "Rice_herb" & Predator == "Ladybeetle") %>%
   mutate(Farmtype = factor(Farmtype, levels = c("Or", "Cv")),
          Stage = factor(Stage, levels = c("Tillering", "Flowering", "Ripening")))
 
 
-### Beta regression models for all predators
+
+
+
+# 2. Fit beta regression models ------------------------------------------------
+### Both predators
 # Initial model specification
 beta_out_all1 <- betareg(Proportion ~ Year + Farmtype + Stage + `Forest_cover_%` + Rel_abd, 
                      data = rice_herb_consmp_all)

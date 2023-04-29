@@ -12,6 +12,7 @@
 ## 4. Prepare C and N trophic discrimination factors
 ## 5. Run the mixing models using JAGS
 ## 6. Organize the raw mixing model outputs
+## 7. Extract the posterior draws in the predator model
 ## 
 ## -----------------------------------------------------------------------------
 set.seed(123)
@@ -193,6 +194,7 @@ jags_ladybeetle <- run_model(run = "short",
 setwd("./Output/JAGS")
 options(max.print = 1000000)
 
+output_JAGS_predator <- 
 output_JAGS(jags_predator, mix_siar_predator, source_mix_siar_predator, 
             output_options = list(summary_save = T,
                                   summary_name = "model_out_predator",
@@ -215,6 +217,7 @@ output_JAGS(jags_predator, mix_siar_predator, source_mix_siar_predator,
                                   plot_pairs_save_png = F,
                                   plot_xy_save_png = F))
 
+output_JAGS_spider <- 
 output_JAGS(jags_spider, mix_siar_spider, source_mix_siar_spider, 
             output_options = list(summary_save = T,
                                   summary_name = "model_out_spider",
@@ -237,6 +240,7 @@ output_JAGS(jags_spider, mix_siar_spider, source_mix_siar_spider,
                                   plot_pairs_save_png = F,
                                   plot_xy_save_png = F))
 
+output_JAGS_ladybeetle <- 
 output_JAGS(jags_ladybeetle, mix_siar_ladybeetle, source_mix_siar_ladybeetle, 
             output_options = list(summary_save = T,
                                   summary_name = "model_out_ladybeetle",
@@ -262,19 +266,9 @@ output_JAGS(jags_ladybeetle, mix_siar_ladybeetle, source_mix_siar_ladybeetle,
 setwd("../..")
 
 
-
-
-
-
-
-
-
-
-
-
 # 6. Organize the raw mixing model outputs -------------------------------------
 model_out_predator_raw <- read.table("Output/JAGS/model_out_predator.txt", header = F, fill = TRUE)
-model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], model_out_predator_raw[290:571, 3]) %>%
+model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], model_out_predator_raw[290:571, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "All") %>% 
   separate(col = ID, into = c("P", "Farm", "Stage", "Source"), sep = "\\.") %>%
@@ -285,7 +279,7 @@ model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], 
   select(Predator, Source, Mean, SD, `2.5%`, `50%`, `97.5%`, Farmtype, Stage, Year, Farm_ID)
 
 model_out_spider_raw <- read.table("Output/JAGS/model_out_spider.txt", header = F, fill = TRUE)
-model_out_spider_clean <- bind_cols(model_out_spider_raw[5:262, c(1:4, 7)], model_out_spider_raw[266:523, 3]) %>%
+model_out_spider_clean <- bind_cols(model_out_spider_raw[5:262, c(1:4, 7)], model_out_spider_raw[266:523, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "Spider") %>% 
   separate(col = ID, into = c("P", "Farm", "Stage", "Source"), sep = "\\.") %>%
@@ -296,7 +290,7 @@ model_out_spider_clean <- bind_cols(model_out_spider_raw[5:262, c(1:4, 7)], mode
   select(Predator, Source, Mean, SD, `2.5%`, `50%`, `97.5%`, Farmtype, Stage, Year, Farm_ID)
 
 model_out_ladybeetle_raw <- read.table("Output/JAGS/model_out_ladybeetle.txt", header = F, fill = TRUE)
-model_out_ladybeetle_clean <- bind_cols(model_out_ladybeetle_raw[5:175, c(1:4, 7)], model_out_ladybeetle_raw[179:349, 3]) %>%
+model_out_ladybeetle_clean <- bind_cols(model_out_ladybeetle_raw[5:175, c(1:4, 7)], model_out_ladybeetle_raw[179:349, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "Ladybeetle") %>% 
   separate(col = ID, into = c("P", "Farm", "Stage", "Source"), sep = "\\.") %>%
@@ -317,6 +311,22 @@ model_out_clean <- bind_rows(model_out_predator_clean, model_out_spider_clean, m
                                    to = c("MO1", "MC1", "LO1", "LC1", "SO1", "SC1")))
 
 write_rds(model_out_clean, "Output/Data_clean/model_out_clean.rds")
+
+
+# 7. Extract the posterior draws in the predator model -------------------------
+Posterior_draws_predator <- lapply(1:34, function(farm){  # 34 individual farm and year combinations
+  lapply(1:3, function(stage){  # three crop stages 
+      output_JAGS_predator[, farm, stage, ] %>% 
+        as.data.frame() %>% 
+        `names<-`(c("Detritivore", "Rice_herb", "Tour_herb")) %>% 
+        gather(key = "Prey_source", value = "Draw")
+    }) %>% `names<-`(c("Flowering", "Ripening", "Tillering")) %>% 
+      bind_rows(.id = "Stage")
+  })
+
+names(Posterior_draws_predator) <- Farm_ID
+
+write_rds(Posterior_draws_predator, "Output/Data_clean/Posterior_draws_predator.rds")
 
 
 
