@@ -58,6 +58,9 @@ tour_herb_data <- SID_all_clean %>%
 detritivore_data <- SID_all_clean %>%
   filter(Family %in% detritivore)
 
+rice_herb_data %>% 
+  filter(Family == "CIC" | Family == "DEL")
+
 
 # 2. Preparation of consumer data ----------------------------------------------
 mixture_predator <- 
