@@ -20,6 +20,7 @@
 ##    median proportion of rice herbivores consumed in predators' diet and various 
 ##    abiotic (farm type, crop stage, year, surrounding forest cover) and 
 ##    biotic factors (relative abundance of rice herbivores)
+## 5. Summary of results from the weighted beta regression models and post-hoc comparisons
 ##
 ## -----------------------------------------------------------------------------
 set.seed(123)
@@ -523,7 +524,18 @@ multcomp_stage_ladybeetles_median_weighted <- emmeans(beta_out_ladybeetles_media
 boot_CI_ladybeetles <- model_parameters(beta_out_ladybeetles_median_weighted, bootstrap = TRUE, ci_method = "bcai")
 
 
+# 5. Summary of model results and post-hoc comparisons -------------------------
+Anova(beta_out_all_median_weighted_wo_outliers)
+multcomp_farmtype_all_median_weighted
+multcomp_stage_all_median_weighted
 
+Anova(beta_out_spiders_median_weighted_wo_outliers)
+multcomp_farmtype_spiders_median_weighted
+multcomp_stage_spiders_median_weighted
+
+Anova(beta_out_ladybeetles_median_weighted)
+multcomp_farmtype_ladybeetles_median_weighted
+multcomp_stage_ladybeetles_median_weighted
 
 
 

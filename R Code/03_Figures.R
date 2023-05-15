@@ -89,9 +89,9 @@ label1 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider"
 ### Three years pooled
 model_out_clean %>% 
   group_by(Predator, Farmtype, Stage, Source) %>%
-  summarise(Proportion = mean(Mean, na.rm = T),
+  summarise(Proportion = mean(`50%`, na.rm = T),
             n = n(),
-            SD = sd(Mean),
+            SD = sd(`50%`),
             SE = SD/sqrt(n)) %>%
   ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
   geom_line(position = position_dodge(0.1), size = 1.2) +
@@ -107,7 +107,7 @@ model_out_clean %>%
   geom_text(data = label1, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
   coord_cartesian(ylim = c(0, 1), clip = "off") +
   xlab("Crop stage") +
-  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  ylab("Proportion of prey sources in the diet (mean ± SE)") +
   scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_y_continuous(expand = c(0, 0)) +
@@ -133,9 +133,9 @@ label1 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider"
 model_out_clean %>% 
   filter(Year == 2017) %>%
   group_by(Predator, Farmtype, Stage, Source) %>%
-  summarise(Proportion = mean(Mean, na.rm = T),
+  summarise(Proportion = mean(`50%`, na.rm = T),
             n = n(),
-            SD = sd(Mean),
+            SD = sd(`50%`),
             SE = SD/sqrt(n)) %>%
   ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
   geom_line(position = position_dodge(0.1), size = 1.2) +
@@ -151,7 +151,7 @@ model_out_clean %>%
   geom_text(data = label1, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
   coord_cartesian(ylim = c(0, 1), clip = "off") +
   xlab("Crop stage") +
-  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  ylab("Proportion of prey sources in the diet (mean ± SE)") +
   scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_y_continuous(expand = c(0, 0)) +
@@ -180,9 +180,9 @@ label2 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider"
 model_out_clean %>% 
   filter(Year == 2018) %>%
   group_by(Predator, Farmtype, Stage, Source) %>%
-  summarise(Proportion = mean(Mean, na.rm = T),
+  summarise(Proportion = mean(`50%`, na.rm = T),
             n = n(),
-            SD = sd(Mean),
+            SD = sd(`50%`),
             SE = SD/sqrt(n)) %>%
   ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
   geom_line(position = position_dodge(0.1), size = 1.2) +
@@ -198,7 +198,7 @@ model_out_clean %>%
   geom_text(data = label2, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
   coord_cartesian(ylim = c(0, 1), clip = "off") +
   xlab("Crop stage") +
-  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  ylab("Proportion of prey sources in the diet (mean ± SE)") +
   scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_y_continuous(expand = c(0, 0)) +
@@ -227,9 +227,9 @@ label3 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider"
 model_out_clean %>% 
   filter(Year == 2019) %>%
   group_by(Predator, Farmtype, Stage, Source) %>%
-  summarise(Proportion = mean(Mean, na.rm = T),
+  summarise(Proportion = mean(`50%`, na.rm = T),
             n = n(),
-            SD = sd(Mean),
+            SD = sd(`50%`),
             SE = SD/sqrt(n)) %>%
   ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
   geom_line(position = position_dodge(0.1), size = 1.2) +
@@ -245,7 +245,7 @@ model_out_clean %>%
   geom_text(data = label3, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
   coord_cartesian(ylim = c(0, 1), clip = "off") +
   xlab("Crop stage") +
-  ylab("Proportion of prey sources in the diet (Mean ± SE)") +
+  ylab("Proportion of prey sources in the diet (mean ± SE)") +
   scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_y_continuous(expand = c(0, 0)) +
@@ -263,10 +263,10 @@ ggsave("Output/Figures/Diet_proportion_2019.tiff", width = 6, height = 7, dpi = 
 
 model_out_clean %>% 
   group_by(Year, Farmtype, Stage, Predator, Source) %>%
-  summarise(Proportion = mean(Mean, na.rm = T),
+  summarise(Proportion = mean(`50%`, na.rm = T),
             Proportion = round(Proportion, 2),
             n = n(),
-            SD = sd(Mean),
+            SD = sd(`50%`),
             SE = SD/sqrt(n),
             SE = round(SE, 2)) %>%
   ungroup() %>%
@@ -290,7 +290,7 @@ label2 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider"
 model_out_clean %>% 
   filter(Source == "Rice_herb") %>%
   group_by(Predator, Farmtype, Stage, Year) %>%
-  summarise(Proportion = mean(Mean, na.rm = T)) %>%
+  summarise(Proportion = mean(`50%`, na.rm = T)) %>%
   ggplot(aes(x = Stage, y = Proportion, linetype = Year, shape = Year, color = Year, group = Year)) +
   geom_line(position = position_dodge(0.1), size = 1.2) +
   geom_point(position = position_dodge(0.1), size = 3) + 
