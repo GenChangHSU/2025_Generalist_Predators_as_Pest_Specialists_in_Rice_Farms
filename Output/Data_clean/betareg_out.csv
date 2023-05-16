@@ -1,0 +1,16 @@
+Predator,Factor,Df,Chisq,Pr(>Chisq)
+all,Year,2,2.02,0.364
+all,Farmtype,1,20.18,0
+all,Stage,2,225.48,0
+all,`Forest_cover_%`,1,0.61,0.434
+all,Rel_abd,1,0.08,0.773
+spiders,Year,2,7.58,0.023
+spiders,Farmtype,1,11.58,0.001
+spiders,Stage,2,95.93,0
+spiders,`Forest_cover_%`,1,0.95,0.33
+spiders,Rel_abd,1,0.92,0.338
+ladybeetles,Year,2,15,0.001
+ladybeetles,Farmtype,1,1.35,0.246
+ladybeetles,Stage,2,90.94,0
+ladybeetles,`Forest_cover_%`,1,0.76,0.384
+ladybeetles,Rel_abd,1,1.15,0.283

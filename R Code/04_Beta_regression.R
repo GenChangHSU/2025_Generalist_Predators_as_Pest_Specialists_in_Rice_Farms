@@ -525,17 +525,58 @@ boot_CI_ladybeetles <- model_parameters(beta_out_ladybeetles_median_weighted, bo
 
 
 # 5. Summary of model results and post-hoc comparisons -------------------------
-Anova(beta_out_all_median_weighted_wo_outliers)
-multcomp_farmtype_all_median_weighted
-multcomp_stage_all_median_weighted
+### LR test of the factor significance
+Anova_out_all <- Anova(beta_out_all_median_weighted_wo_outliers)
+Anova_out_spiders <- Anova(beta_out_spiders_median_weighted_wo_outliers)
+Anova_out_ladybeetles <- Anova(beta_out_ladybeetles_median_weighted)
 
-Anova(beta_out_spiders_median_weighted_wo_outliers)
-multcomp_farmtype_spiders_median_weighted
-multcomp_stage_spiders_median_weighted
+map(list(all = Anova_out_all, 
+         spiders = Anova_out_spiders, 
+         ladybeetles = Anova_out_ladybeetles), function(x){
+           x %>% 
+             as.data.frame() %>% 
+             rownames_to_column(var = "Factor") %>% 
+             mutate(Chisq = round(Chisq, 2),
+                    `Pr(>Chisq)` = round(`Pr(>Chisq)`, 3))
+         }) %>% 
+  bind_rows(.id = "Predator") %>% 
+  write_csv("Output/Data_clean/betareg_out.csv")
 
-Anova(beta_out_ladybeetles_median_weighted)
-multcomp_farmtype_ladybeetles_median_weighted
-multcomp_stage_ladybeetles_median_weighted
+### Post-hoc test for farm type
+list(all = multcomp_farmtype_all_median_weighted,
+     spiders = multcomp_farmtype_spiders_median_weighted,
+     ladybeetles = multcomp_farmtype_ladybeetles_median_weighted) %>% 
+  bind_rows(.id = "Predator") %>% 
+  mutate(emmean = round(emmean, 2),
+         SE = round(SE, 2),
+         asymp.LCL = round(asymp.LCL, 2),
+         asymp.UCL = round(asymp.UCL, 2),
+         .group = str_trim(.group)) %>% 
+  mutate(mean_SE = paste0(emmean, .group, " (±", SE, ")")) %>% 
+  select(Predator, Farmtype, mean_SE, asymp.LCL, asymp.UCL) %>% 
+  write_csv("Output/Data_clean/Posthoc_farmtype.csv")
+
+### Post-hoc test for crop stage
+list(all = multcomp_stage_all_median_weighted,
+     spiders = multcomp_stage_spiders_median_weighted,
+     ladybeetles = multcomp_stage_ladybeetles_median_weighted) %>% 
+  bind_rows(.id = "Predator") %>% 
+  mutate(emmean = round(emmean, 2),
+         SE = round(SE, 2),
+         asymp.LCL = round(asymp.LCL, 2),
+         asymp.UCL = round(asymp.UCL, 2),
+         .group = str_trim(.group)) %>% 
+  mutate(mean_SE = paste0(emmean, .group, " (±", SE, ")")) %>% 
+  select(Predator, Stage, mean_SE, asymp.LCL, asymp.UCL) %>% 
+  write_csv("Output/Data_clean/Posthoc_stage.csv")
+
+
+
+
+
+
+
+
 
 
 
