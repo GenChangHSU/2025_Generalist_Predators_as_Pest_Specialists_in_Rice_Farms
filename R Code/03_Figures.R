@@ -11,6 +11,7 @@
 ## 3. Create line charts of relative abundances of prey sources over crop stages.
 ## 4. Create line charts of mean number of predators over crop stages.
 ## 5. Create density plots of the posterior draws in the predator model.
+## 6. Create stable isotope biplot of rice plant, prey sources, and prey families.
 ##
 ## -----------------------------------------------------------------------------
 set.seed(123)
@@ -66,11 +67,14 @@ my_theme <-
 
 
 # Import files -----------------------------------------------------------------
+SID_all_clean <- readRDS("Output/Data_clean/SID_all_clean.rds")
 model_out_clean <- readRDS("Output/Data_clean/model_out_clean.rds")
 Posterior_draws_predator <- readRDS("Output/Data_clean/Posterior_draws_predator.rds")
 Abd_2017 <- read.xlsx("Data_raw/arthropod_abd_2017.xlsx", sheetIndex = 1)
 Abd_2018 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 1)
 Abd_2019 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 2)
+Rice_data <- read_csv("./Data_raw/SID_2017.csv") %>% 
+  filter(Species == "Os")
 
 
 ############################### Code starts here ###############################
@@ -588,6 +592,73 @@ annotate_figure(P_density,
                 left = text_grob("Scaled density", size = 15, rot = 90))
 
 ggsave("Output/Figures/density_plot.tiff", width = 8, height = 5.2, dpi = 600, device = "tiff")
+
+
+# 6. Stable isotope biplot of rice plant and prey sources ----------------------
+### Stable isotope signatures of rice plant
+Rice_SI_summary <- Rice_data %>% 
+  group_by(Species) %>% 
+  summarise(mean_d13C = mean(d_13C),
+            mean_d15N = mean(d_15N),
+            n = n(),
+            SE_d13C = sd(d_13C)/sqrt(n),
+            SE_d15N = sd(d_15N)/sqrt(n))
+
+### Stable isotope signatures of prey sources
+rice_herb <- c("DEL", "CIC", "PEN", "ALY", "LYG")
+tour_herb <- c("ACR", "CHR")
+detritivore <- c("CHI", "SCI", "MUS", "EPH", "EMP", "STR", "CHL", "TER")
+
+Source_SI_summary <- SID_all_clean %>% 
+  filter(Stage != "Seedling") %>% 
+  mutate(Prey_source = case_when(Family %in% rice_herb ~ "Rice_herb",
+                                 Family %in% tour_herb ~ "Tour_herb",
+                                 Family %in% detritivore ~ "Detritivore",
+                                 T ~ NA)) %>% 
+  mutate(Prey_source = factor(Prey_source, levels = c("Rice_herb", "Tour_herb", "Detritivore"), ordered = T)) %>% 
+  drop_na() %>% 
+  group_by(Prey_source) %>% 
+  summarise(mean_d13C = mean(d13C),
+            mean_d15N = mean(d15N),
+            n = n(),
+            SE_d13C = sd(d13C)/sqrt(n),
+            SE_d15N = sd(d15N)/sqrt(n))
+
+### Stable isotope signatures of prey families
+Family_SI_summary <- SID_all_clean %>% 
+  filter(Stage != "Seedling") %>% 
+  mutate(Prey_source = case_when(Family %in% rice_herb ~ "Rice_herb",
+                                 Family %in% tour_herb ~ "Tour_herb",
+                                 Family %in% detritivore ~ "Detritivore",
+                                 T ~ NA)) %>% 
+  mutate(Prey_source = factor(Prey_source, levels = c("Rice_herb", "Tour_herb", "Detritivore"), ordered = T)) %>% 
+  drop_na() %>% 
+  group_by(Prey_source, Family) %>% 
+  summarise(mean_d13C = mean(d13C),
+            mean_d15N = mean(d15N),
+            n = n(),
+            SE_d13C = sd(d13C)/sqrt(n),
+            SE_d15N = sd(d15N)/sqrt(n))
+
+### SI biplot of rice plant and prey sources
+ggplot() +
+  geom_point(data = Source_SI_summary, aes(x = mean_d13C, y = mean_d15N, color = Prey_source, shape = Prey_source), size = 2.5) +
+  geom_errorbar(data = Source_SI_summary, aes(x = mean_d13C, ymin = mean_d15N-SE_d15N*1.96, ymax = mean_d15N+SE_d15N*1.96, color = Prey_source), width = 0.3, size = 1) +
+  geom_errorbarh(data = Source_SI_summary, aes(y = mean_d15N, xmin = mean_d13C-SE_d13C*1.96, xmax = mean_d13C+SE_d13C*1.96, color = Prey_source), height = 0.3, size = 1) +
+  geom_point(data = Rice_SI_summary, aes(x = mean_d13C, y = mean_d15N), size = 2.5) +
+  geom_errorbar(data = Rice_SI_summary, aes(x = mean_d13C, ymin = mean_d15N-SE_d15N*1.96, ymax = mean_d15N+SE_d15N*1.96), width = 0.3, size = 1) +
+  geom_errorbarh(data = Rice_SI_summary, aes(y = mean_d15N, xmin = mean_d13C-SE_d13C*1.96, xmax = mean_d13C+SE_d13C*1.96), height = 0.3, size = 1) +
+  my_theme + 
+  labs(x = expression(paste(delta^{13}, "C (\u2030)", sep = "")), y = expression(paste(delta^{15}, "N (\u2030)", sep = ""))) +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") + 
+  
+  # annotate(geom = "text", x = -30, y = 4.5, label = "Rice plant", size = 4.5) +
+  # ylim(c(0, 20))
+
+ggsave("Output/Figures/Biplot.tiff", width = 6, height = 5, dpi = 600)
+
+
 
 
 
