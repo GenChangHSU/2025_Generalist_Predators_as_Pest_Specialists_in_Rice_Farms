@@ -1,10 +1,10 @@
 Predator,Stage,mean_SE,asymp.LCL,asymp.UCL
-all,Tillering,0.3a (±0.03),0.24,0.36
-all,Flowering,0.86b (±0.02),0.82,0.89
-all,Ripening,0.93c (±0.01),0.91,0.96
-spiders,Tillering,0.34a (±0.04),0.26,0.42
-spiders,Flowering,0.83b (±0.02),0.78,0.87
-spiders,Ripening,0.88b (±0.02),0.83,0.93
-ladybeetles,Flowering,0.91a (±0.01),0.89,0.92
-ladybeetles,Tillering,0.92a (±0.01),0.9,0.94
-ladybeetles,Ripening,0.98b (±0),0.97,0.98
+all,Tillering,0.24a (±0.06),0.14,0.36
+all,Flowering,0.85b (±0.04),0.76,0.91
+all,Ripening,0.91c (±0.03),0.85,0.95
+spiders,Tillering,0.27a (±0.07),0.16,0.43
+spiders,Flowering,0.81b (±0.05),0.69,0.89
+spiders,Ripening,0.86b (±0.04),0.75,0.93
+ladybeetles,Tillering,0.92a (±0.01),0.89,0.93
+ladybeetles,Flowering,0.92a (±0.01),0.9,0.93
+ladybeetles,Ripening,0.98b (±0),0.98,0.99

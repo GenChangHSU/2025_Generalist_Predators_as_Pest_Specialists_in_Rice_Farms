@@ -1,7 +1,7 @@
 Predator,Farmtype,mean_SE,asymp.LCL,asymp.UCL
-all,Or,0.66a (±0.02),0.62,0.69
-all,Cv,0.74b (±0.02),0.7,0.77
-spiders,Or,0.64a (±0.02),0.59,0.68
-spiders,Cv,0.73b (±0.02),0.69,0.77
-ladybeetles,Or,0.93a (±0.01),0.92,0.94
-ladybeetles,Cv,0.94a (±0.01),0.93,0.95
+all,Or,0.61a (±0.08),0.45,0.76
+all,Cv,0.81b (±0.05),0.69,0.9
+spiders,Or,0.55a (±0.1),0.35,0.73
+spiders,Cv,0.79b (±0.07),0.63,0.9
+ladybeetles,Or,0.95a (±0.01),0.93,0.96
+ladybeetles,Cv,0.95a (±0.01),0.94,0.96
