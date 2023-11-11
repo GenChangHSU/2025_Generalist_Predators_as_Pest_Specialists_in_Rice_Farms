@@ -315,6 +315,18 @@ model_out_clean <- bind_rows(model_out_predator_clean, model_out_spider_clean, m
 
 write_rds(model_out_clean, "Output/Data_clean/model_out_clean.rds")
 
+### Write the posterior estimates as supplementary material
+model_out_clean_supplementary <- model_out_clean %>% 
+  select(Year, Predator, Farm_ID, Stage, Source, Mean, SD, Median = `50%`, Lower = `2.5%`, Upper = `97.5%`) %>% 
+  arrange(Year, Predator, Farm_ID, Stage, Source) %>% 
+  mutate(Predator = case_when(Predator == "All" ~ "Both",
+                              TRUE ~ Predator),
+         Source = case_when(Source == "Rice_herb" ~ "Rice herbivore",
+                            Source == "Tour_herb" ~ "Tourist herbivore",
+                            TRUE ~ Source))
+
+write_csv(model_out_clean_supplementary, "Output/Data_clean/model_out_clean_supplementary.csv")
+
 
 # 7. Extract the posterior draws in the predator model -------------------------
 Posterior_draws_predator <- lapply(1:34, function(farm){  # 34 individual farm and year combinations
