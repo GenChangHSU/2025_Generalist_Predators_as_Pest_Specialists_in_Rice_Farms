@@ -1,17 +1,17 @@
 ## -----------------------------------------------------------------------------
-## Title: Analysis of the relationships between rice herbivore consumption by predators 
+## Title: Analyze the relationships between rice herbivore consumption by predators 
 ##        and various abiotic and biotic factors
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2023-11-11
+## Date: 2024-08-17
 ##
 ## Description:
-## 1. Prepare the abiotic and biotic factor data for beta regression models
+## 1. Prepare the abiotic and biotic factor data for the beta regression models
 ## 2. Fit weighted beta GLMMs and perform post-hoc tests for both predators
 ## 3. Fit weighted beta GLMMs and perform post-hoc tests for spiders
 ## 4. Fit weighted beta GLMMs and perform post-hoc tests for ladybeetles
-## 5. Summary model outputs
+## 5. Summarize model outputs
 ##
 ## -----------------------------------------------------------------------------
 set.seed(123)
