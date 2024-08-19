@@ -61,6 +61,17 @@ detritivore_data <- SID_all_clean %>%
 rice_herb_data %>% 
   filter(Family == "CIC" | Family == "DEL")
 
+### Number of spider and ladybeetle capsules
+nrow(spider_data)
+nrow(ladybeetle_data)
+
+### Number of capsules for each family in each study year
+
+
+
+
+
+
 
 # 2. Preparation of consumer data ----------------------------------------------
 mixture_predator <- 
@@ -326,6 +337,13 @@ model_out_clean_supplementary <- model_out_clean %>%
                             TRUE ~ Source))
 
 write_csv(model_out_clean_supplementary, "Output/Data_clean/model_out_clean_supplementary.csv")
+
+### Number of farms * stage * year estimates for "both predators", "spider only", and "ladybeetle only" models 
+model_out_clean_supplementary %>% 
+  group_by(Predator) %>% 
+  distinct(Year, Stage, Farm_ID) %>% 
+  group_by(Predator) %>% 
+  summarise(n = n())
 
 
 # 7. Extract the posterior draws in the predator model -------------------------
