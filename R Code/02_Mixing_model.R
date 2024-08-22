@@ -66,11 +66,25 @@ nrow(spider_data)
 nrow(ladybeetle_data)
 
 ### Number of capsules for each family in each study year
+predator_data %>% 
+  group_by(Year, Family) %>% 
+  summarise(n = n())
 
+rice_herb_data %>% 
+  group_by(Year, Family) %>% 
+  summarise(n = n())
 
+tour_herb_data %>% 
+  group_by(Year, Family) %>% 
+  summarise(n = n())
 
+detritivore_data %>% 
+  group_by(Year, Family) %>% 
+  summarise(n = n()) %>% 
+  print(n = 25)
 
-
+nrow(predator_data)
+nrow(rice_herb_data) + nrow(tour_herb_data) + nrow(detritivore_data)
 
 
 # 2. Preparation of consumer data ----------------------------------------------

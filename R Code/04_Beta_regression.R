@@ -40,6 +40,7 @@ arthropod_abd_2019_raw <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", she
 
 # 1. Prepare the abiotic and biotic factor data for beta regression models -----
 ### Arthropod abundance data
+predator <- c("ARA", "TET", "COC")
 rice_herb <- c("DEL", "CIC", "PEN", "ALY", "LYG")
 tour_herb <- c("ACR", "CHR")
 detritivore <- c("CHI", "SCI", "MUS", "EPH", "EMP", "STR", "CHL", "TER")
@@ -108,7 +109,7 @@ write_rds(arthropod_abd_clean, "Output/Data_clean/arthropod_abd_clean.rds")
 rice_herb_consmp_all <- model_out_clean %>%
   left_join(arthropod_abd_clean, by = c("Year", "Farm_ID", "Stage", "Source")) %>%
   left_join(forest_cover, by = "Farm_ID") %>%
-  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, 
+  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, Abundance, 
          Rel_abd, Source, Proportion_mean = Mean, Proportion_median = `50%`) %>%
   arrange(Predator, Year, Farm_ID) %>%
   filter(Source == "Rice_herb" & Predator == "All") %>%
@@ -120,7 +121,7 @@ rice_herb_consmp_all <- model_out_clean %>%
 rice_herb_consmp_spiders <- model_out_clean %>%
   left_join(arthropod_abd_clean, by = c("Year", "Farm_ID", "Stage", "Source")) %>%
   left_join(forest_cover, by = "Farm_ID") %>%
-  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, 
+  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, Abundance,
          Rel_abd, Source, Proportion_mean = Mean, Proportion_median = `50%`) %>%
   arrange(Predator, Year, Farm_ID) %>%
   filter(Source == "Rice_herb" & Predator == "Spider") %>%
@@ -132,7 +133,7 @@ rice_herb_consmp_spiders <- model_out_clean %>%
 rice_herb_consmp_ladybeetles <- model_out_clean %>%
   left_join(arthropod_abd_clean, by = c("Year", "Farm_ID", "Stage", "Source")) %>%
   left_join(forest_cover, by = "Farm_ID") %>%
-  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, 
+  select(Predator, Year, Farm_ID, Farmtype, Stage, `Forest_cover_%`, Abundance,
          Rel_abd, Source, Proportion_mean = Mean, Proportion_median = `50%`) %>%
   arrange(Predator, Year, Farm_ID) %>%
   filter(Source == "Rice_herb" & Predator == "Ladybeetle") %>%
@@ -169,6 +170,7 @@ beta_out_all_median_weighted <- glmmTMB(Proportion_median ~ Year + Farmtype +
 lrtest(beta_out_all_median_weighted)
 
 ### Test for factor significance
+summary(beta_out_all_median_weighted)
 Anova(beta_out_all_median_weighted)
 
 ### Model diagnostics
@@ -182,6 +184,22 @@ multcomp_farmtype_all_median_weighted <- emmeans(beta_out_all_median_weighted, ~
   multcomp::cld(alpha = 0.05, Letters = letters, adjusj = "tukey")
 multcomp_stage_all_median_weighted <- emmeans(beta_out_all_median_weighted, ~Stage, type = "response") %>%
   multcomp::cld(alpha = 0.05, Letters = letters, adjusj = "tukey")
+
+### Use absolute abundance as the predictor
+beta_out_all_median_weighted_abd <- glmmTMB(Proportion_median ~ Year + Farmtype + 
+                                          Stage + `Forest_cover_%` + Abundance + 
+                                          (1|Pair_ID/Farm_ID),
+                                        data = rice_herb_consmp_all,
+                                        weights = weights_vector_all,
+                                        na.action = na.exclude,
+                                        family = beta_family(link = "logit"))
+
+### Test for global significance
+lrtest(beta_out_all_median_weighted_abd)
+
+### Test for factor significance
+summary(beta_out_all_median_weighted_abd)
+Anova(beta_out_all_median_weighted_abd)
 
 
 # 3. Fit weighted beta GLMMs for spiders ---------------------------------------
@@ -211,6 +229,7 @@ beta_out_spiders_median_weighted <- glmmTMB(Proportion_median ~ Year + Farmtype 
 lrtest(beta_out_spiders_median_weighted)
 
 ### Test for factor significance
+summary(beta_out_spiders_median_weighted)
 Anova(beta_out_spiders_median_weighted)
 
 ### Model diagnostics
@@ -224,6 +243,22 @@ multcomp_farmtype_spiders_median_weighted <- emmeans(beta_out_spiders_median_wei
   multcomp::cld(alpha = 0.05, Letters = letters, adjusj = "tukey")
 multcomp_stage_spiders_median_weighted <- emmeans(beta_out_spiders_median_weighted, ~Stage, type = "response") %>%
   multcomp::cld(alpha = 0.05, Letters = letters, adjusj = "tukey")
+
+### Use absolute abundance as the predictor
+beta_out_spiders_median_weighted_abd <- glmmTMB(Proportion_median ~ Year + Farmtype + 
+                                              Stage + `Forest_cover_%` + Abundance + 
+                                              (1|Pair_ID/Farm_ID),
+                                            data = rice_herb_consmp_spiders,
+                                            weights = weights_vector_spiders,
+                                            na.action = na.exclude,
+                                            family = beta_family(link = "logit"))
+
+### Test for global significance
+lrtest(beta_out_spiders_median_weighted_abd)
+
+### Test for factor significance
+summary(beta_out_spiders_median_weighted_abd)
+Anova(beta_out_spiders_median_weighted_abd)
 
 
 # 4. Fit weighted beta GLMMs for ladybeetles -----------------------------------
@@ -253,6 +288,7 @@ beta_out_ladybeetles_median_weighted <- glmmTMB(Proportion_median ~ Year + Farmt
 lrtest(beta_out_ladybeetles_median_weighted)
 
 ### Test for factor significance
+summary(beta_out_ladybeetles_median_weighted)
 Anova(beta_out_ladybeetles_median_weighted)
 
 ### Model diagnostics
@@ -266,6 +302,22 @@ multcomp_farmtype_ladybeetles_median_weighted <- emmeans(beta_out_ladybeetles_me
   multcomp::cld(alpha = 0.05, Letters = letters, adjusj = "tukey")
 multcomp_stage_ladybeetles_median_weighted <- emmeans(beta_out_ladybeetles_median_weighted, ~Stage, type = "response") %>%
   multcomp::cld(alpha = 0.05, Letters = letters, adjusj = "tukey")
+
+### Fit the GLMM model with farm ID nested within pair ID as random effects
+beta_out_ladybeetles_median_weighted_abd <- glmmTMB(Proportion_median ~ Year + Farmtype + 
+                                                  Stage + `Forest_cover_%` + Abundance + 
+                                                  (1|Pair_ID/Farm_ID),
+                                                data = rice_herb_consmp_ladybeetles,
+                                                weights = weights_vector_ladybeetles,
+                                                na.action = na.exclude,
+                                                family = beta_family(link = "logit"))
+
+### Test for global significance
+lrtest(beta_out_ladybeetles_median_weighted_abd)
+
+### Test for factor significance
+summary(beta_out_ladybeetles_median_weighted_abd)
+Anova(beta_out_ladybeetles_median_weighted_abd)
 
 
 # 5. Summary of model results and post-hoc comparisons -------------------------

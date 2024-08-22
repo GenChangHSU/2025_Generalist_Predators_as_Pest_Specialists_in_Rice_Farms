@@ -3,7 +3,7 @@
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2023-04-27
+## Date: 2024-08-19
 ##
 ## Description: 
 ## 1. Plot the daily mean temperature and precipitation of the study sites during 
@@ -53,10 +53,10 @@ my_theme <-
     # Legend
     legend.position = c(1, 1),
     legend.spacing.x = unit(0.2, "cm"),
-    legend.key.width = unit(1.5, "cm"),
+    legend.key.width = unit(1.2, "cm"),
     legend.key.size = unit(1.2, "line"),
     legend.key = element_blank(),
-    legend.text = element_text(size = 10, margin = margin(0, 10, 0, -5)),
+    legend.text = element_text(size = 10, margin = margin(0, 10, 0, 0)),
     legend.text.align = 0,
     legend.box.just = "center",
     legend.justification = c(0.5, 0.5),
@@ -127,7 +127,7 @@ ggplot(data = weather_data, aes(x = Date, y = Values, color = Year, group = Year
         legend.position = "top",
         legend.title = element_blank())
 
-ggsave("./Output/Figures/weather.tiff", width = 7.5, height = 5.5, dpi = 600, device = "tiff")
+ggsave("./Output/Figures/Weather.tiff", width = 7.5, height = 5.5, dpi = 600, device = "tiff")
 
 
 
