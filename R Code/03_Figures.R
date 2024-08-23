@@ -294,10 +294,15 @@ label2 <- data.frame(Predator = c("All", "Spider", "Ladybeetle", "All", "Spider"
 model_out_clean %>% 
   filter(Source == "Rice_herb") %>%
   group_by(Predator, Farmtype, Stage, Year) %>%
-  summarise(Proportion = mean(`50%`, na.rm = T)) %>%
+  summarise(Proportion = mean(`50%`, na.rm = T),
+            sd = sd(`50%`, na.rm = T),
+            n = n(),
+            se = sd/sqrt(n)) %>%
   ggplot(aes(x = Stage, y = Proportion, linetype = Year, shape = Year, color = Year, group = Year)) +
   geom_line(position = position_dodge(0.1), size = 1.2) +
   geom_point(position = position_dodge(0.1), size = 3) + 
+  geom_errorbar(aes(x = Stage, ymin = Proportion - se, ymax = Proportion + se, color = Year, group = Year), 
+                position = position_dodge(0.1), width = 0, inherit.aes = F, show.legend = F) + 
   facet_grid(Predator~Farmtype, labeller = as_labeller(c("Or" = "Organic", 
                                                          "Cv" = "Conventional",
                                                          "All" = "Both predators",
@@ -306,7 +311,7 @@ model_out_clean %>%
   geom_text(data = label2, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
   coord_cartesian(ylim = c(0, 1), clip = "off") +
   xlab("Crop stage") +
-  ylab("Proportion of rice herbivores consumed in the diet") +
+  ylab("Proportion of rice herbivores in the diet (mean ± SE)") +
   scale_color_manual(values = c("#00BA38", "#00BA38", "#00BA38"), 
                      labels = c("2017", "2018", "2019"), 
                      name = "") +
