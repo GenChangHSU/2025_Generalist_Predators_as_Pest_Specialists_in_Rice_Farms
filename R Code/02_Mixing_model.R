@@ -20,6 +20,7 @@ set.seed(123)
 
 # Libraries --------------------------------------------------------------------
 library(tidyverse)
+library(vegan)
 library(magrittr)
 library(MixSIAR)
 
