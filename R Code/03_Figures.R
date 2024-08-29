@@ -73,8 +73,8 @@ Posterior_draws_predator <- readRDS("Output/Data_clean/Posterior_draws_predator.
 Abd_2017 <- read.xlsx("Data_raw/arthropod_abd_2017.xlsx", sheetIndex = 1)
 Abd_2018 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 1)
 Abd_2019 <- read.xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheetIndex = 2)
-Rice_data <- read_csv("./Data_raw/SID_2017.csv") %>% 
-  filter(Species == "Os")
+Rice_data <- read_csv("./Data_raw/SID_2017.csv") %>% filter(Species == "Os")
+TDF <- read.csv("./Output/Data_clean/TDF.csv")
 
 
 ############################### Code starts here ###############################
@@ -614,7 +614,7 @@ rice_herb <- c("DEL", "CIC", "PEN", "ALY", "LYG")
 tour_herb <- c("ACR", "CHR")
 detritivore <- c("CHI", "SCI", "MUS", "EPH", "EMP", "STR", "CHL", "TER")
 
-Source_SI_summary <- SID_all_clean %>% 
+prey_SI_summary <- SID_all_clean %>% 
   filter(Stage != "Seedling") %>% 
   mutate(Prey_source = case_when(Family %in% rice_herb ~ "Rice_herb",
                                  Family %in% tour_herb ~ "Tour_herb",
@@ -629,22 +629,48 @@ Source_SI_summary <- SID_all_clean %>%
             SE_d13C = sd(d13C)/sqrt(n),
             SE_d15N = sd(d15N)/sqrt(n))
 
+### TDF-corrected prey SI values
+prey_SI_summary <- TDF %>% 
+  select(Source, TDF_d13C = Meand13C, TDF_d15N = Meand15N) %>% 
+  left_join(prey_SI_summary, ., by = join_by("Prey_source" == "Source")) %>% 
+  mutate(mean_d13C_TDF_corrected = mean_d13C + TDF_d13C,
+         mean_d15N_TDF_corrected = mean_d15N + TDF_d15N) %>% 
+  mutate(Prey_source = fct_relevel(Prey_source, "Rice_herb", "Tour_herb", "Detritivore"))
+
+### Stable isotope signatures of predators
+predator <- c("ARA", "TET", "COC")
+
+predator_SI <- SID_all_clean %>% 
+  filter(Stage != "Seedling") %>% 
+  filter(Family %in% predator) %>% 
+  # group_by(Stage) %>% 
+  summarise(mean_d13C = mean(d13C),
+            mean_d15N = mean(d15N),
+            n = n(),
+            SE_d13C = sd(d13C)/sqrt(n),
+            SE_d15N = sd(d15N)/sqrt(n))
+
 ### SI biplot of rice plant and prey sources
 ggplot() +
-  geom_point(data = Source_SI_summary, aes(x = mean_d13C, y = mean_d15N, color = Prey_source, shape = Prey_source), size = 2.5) +
-  geom_errorbar(data = Source_SI_summary, aes(x = mean_d13C, ymin = mean_d15N-SE_d15N*1.96, ymax = mean_d15N+SE_d15N*1.96, color = Prey_source), width = 0.2, size = 1) +
-  geom_errorbarh(data = Source_SI_summary, aes(y = mean_d15N, xmin = mean_d13C-SE_d13C*1.96, xmax = mean_d13C+SE_d13C*1.96, color = Prey_source), height = 0.17, size = 1) +
-  geom_point(data = Rice_SI_summary, aes(x = mean_d13C, y = mean_d15N), size = 2.5) +
-  geom_errorbar(data = Rice_SI_summary, aes(x = mean_d13C, ymin = mean_d15N-SE_d15N*1.96, ymax = mean_d15N+SE_d15N*1.96), width = 0.2, size = 1) +
-  geom_errorbarh(data = Rice_SI_summary, aes(y = mean_d15N, xmin = mean_d13C-SE_d13C*1.96, xmax = mean_d13C+SE_d13C*1.96), height = 0.17, size = 1) +
+  geom_polygon(data = prey_SI_summary, aes(x = mean_d13C_TDF_corrected, y = mean_d15N_TDF_corrected), fill = NA, color = "black", alpha = 0.5) + 
+  geom_errorbar(data = prey_SI_summary, aes(x = mean_d13C_TDF_corrected, ymin = mean_d15N_TDF_corrected - SE_d15N, ymax = mean_d15N_TDF_corrected + SE_d15N, color = Prey_source), width = 0.1, size = 1) +
+  geom_errorbarh(data = prey_SI_summary, aes(y = mean_d15N_TDF_corrected, xmin = mean_d13C_TDF_corrected - SE_d13C, xmax = mean_d13C_TDF_corrected + SE_d13C, color = Prey_source), height = 0.1, size = 1) +
+  geom_point(data = prey_SI_summary, aes(x = mean_d13C_TDF_corrected, y = mean_d15N_TDF_corrected, color = Prey_source, shape = Prey_source), size = 2.5) +
+  geom_errorbar(data = predator_SI, aes(x = mean_d13C, ymin = mean_d15N - SE_d15N, ymax = mean_d15N + SE_d15N), width = 0.1, size = 1) +
+  geom_errorbarh(data = predator_SI, aes(y = mean_d15N, xmin = mean_d13C - SE_d13C, xmax = mean_d13C + SE_d13C), height = 0.11, size = 1) +
+  geom_point(data = predator_SI, aes(x = mean_d13C, y = mean_d15N)) + 
+  scale_x_continuous(limits = c(-27, -21), breaks = seq(-27, -21, 1)) + 
+  scale_y_continuous(limits = c(7.5, 10.5), breaks = seq(7.5, 10.5, 0.5)) + 
   my_theme + 
   labs(x = expression(paste(delta^{13}, "C (\u2030)", sep = "")), y = expression(paste(delta^{15}, "N (\u2030)", sep = ""))) +
   scale_color_manual(values = c("#00BA38", "#619CFF", "#993300"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
   scale_shape_manual(values = c(16, 15, 17), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore"), name = "") +
-  annotate(geom = "text", x = -28.7, y = 5.8, label = "Rice plant", size = 4.5) + 
-  theme(legend.position = c(0.28, 0.85))
+  guides(color = guide_legend(byrow = T), shape = guide_legend(byrow = T)) + 
+  theme(legend.position = c(0.28, 0.85),
+        legend.text = element_text(margin = margin(l = 5))) + 
+  annotate(x = -25, y = 8.15, geom = "text", label = "Predator", size = 4)
 
-ggsave("Output/Figures/Biplot.tiff", width = 6, height = 5, dpi = 600)
+ggsave("Output/Figures/Biplot.tiff", width = 6.5, height = 5, dpi = 600)
 
 
 

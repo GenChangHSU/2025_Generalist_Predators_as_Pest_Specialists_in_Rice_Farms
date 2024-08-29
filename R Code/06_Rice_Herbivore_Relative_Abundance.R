@@ -1,13 +1,15 @@
 ## -----------------------------------------------------------------------------
-## Title: Relative abundance of rice herbivore families/genera in the study farms
+## Title: Summary of the prey abundance in the study farms
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2024-08-19
+## Date: 2024-08-28
 ##
 ## Description: 
 ## 1. Summarize the relative abundance of the rice herbivore families/genera
 ##    at the flowering and ripening stage in the three study years
+## 2. Summarize the abundance of the three prey guilds at the flowering and ripening 
+##    stage in the three study years
 ##
 ## -----------------------------------------------------------------------------
 set.seed(123)
@@ -24,6 +26,7 @@ library(janitor)
 Abd_2017 <- read_xlsx("Data_raw/arthropod_abd_2017.xlsx", sheet = 1)
 Abd_2018 <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheet = 1)
 Abd_2019 <- read_xlsx("Data_raw/arthropod_abd_2018_2019.xlsx", sheet = 2)
+arthropod_abd_clean <- read_rds("./Output/Data_clean/arthropod_abd_clean.rds")
 
 
 ############################### Code starts here ###############################
@@ -75,7 +78,7 @@ Rice_herb_data_2019 <- Abd_2019 %>%
   filter(Date %in% c("0620", "0702")) %>%
   mutate(Stage = case_when(Date == "0620" ~ "Flowering",
                            Date == "0702" ~ "Ripening")) %>%
-  select(Year, Farm_type, Stage, Family = Family.abbr, Count = Abundance, )
+  select(Year, Farm_type, Stage, Family = Family.abbr, Count = Abundance)
 
 bind_rows(Rice_herb_data_2017, 
           Rice_herb_data_2018,
@@ -90,4 +93,24 @@ bind_rows(Rice_herb_data_2017,
   arrange(Stage, Family) %>%
   write_csv("./Output/Data_clean/Rice_Herbivore_Relative_Abundance.csv")
   
+
+# 2. Summarize the abundance of prey guilds ------------------------------------
+arthropod_abd_clean %>% 
+  drop_na() %>% 
+  mutate(Farmtype = str_extract(Farm_ID, pattern = "O|C"),
+         Farmtype = factor(Farmtype, levels = c("O", "C"), labels = c("Organic", "Conventional"))) %>% 
+  group_by(Year, Farmtype, Stage, Source) %>% 
+  summarize(Mean = round(mean(Abundance, na.rm = T), 1),
+            n = n(),
+            SE = round(sd(Abundance, na.rm = T)/sqrt(n), 1)) %>% 
+  filter(Stage %in% c("Flowering", "Ripening")) %>% 
+  ungroup() %>% 
+  mutate(SE = as.character(SE),
+         SE = if_else(is.na(SE), "", SE)) %>% 
+  mutate(Mean_SE = str_c(Mean, SE, sep = " ± ")) %>% 
+  select(-Mean, -n, -SE) %>% 
+  pivot_wider(names_from = c(Year, Farmtype), values_from = Mean_SE) %>% 
+  mutate(Source = fct_relevel(Source, "Rice_herb", "Tour_herb", "Detritivore")) %>% 
+  arrange(Stage, Source) %>% 
+  write_csv("./Output/Data_clean/Prey_Guild_Abundance.csv")
 
