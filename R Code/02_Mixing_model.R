@@ -173,13 +173,15 @@ TDF <- source %>%
   summarise(Meand13C = mean(TDF_C_fun(d13C)), SDd13C = sd(TDF_C_fun(d13C)),
             Meand15N = mean(TDF_N_fun(d15N)), SDd15N = sd(TDF_N_fun(d15N)))
 
+write.csv(TDF, "Output/Data_clean/TDF.csv", row.names = F)
+
 TDF_out <- TDF %>% 
   mutate(across(where(is.numeric), ~ round(.x, 1))) %>% 
   mutate(Mean_SD_d13C = str_c(Meand13C, SDd13C, sep = " ± "),
          Mean_SD_d15N = str_c(Meand15N, SDd15N, sep = " ± ")) %>% 
   select(Source, Mean_SD_d13C, Mean_SD_d15N)
 
-write.csv(TDF_out, "Output/Data_clean/TDF.csv", row.names = F)
+write.csv(TDF_out, "Output/Data_clean/TDF_Out.csv", row.names = F)
 
 discr_mix_siar_predator <- load_discr_data(filename = "Output/Data_clean/TDF.csv", mix_siar_predator)
 discr_mix_siar_spider <- load_discr_data(filename = "Output/Data_clean/TDF.csv", mix_siar_spider)

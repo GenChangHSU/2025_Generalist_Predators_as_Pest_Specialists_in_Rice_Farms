@@ -675,9 +675,3 @@ ggsave("Output/Figures/Biplot.tiff", width = 6.5, height = 5, dpi = 600)
 
 
 
-
-
-
-
-
-
