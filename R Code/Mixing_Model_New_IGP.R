@@ -1,5 +1,5 @@
 ## -----------------------------------------------------------------------------
-## Title: Bayesian Stable Isotope Mixing Model with MixSIAR using predators as a prey source
+## Title: Bayesian Stable Isotope Mixing Model with MixSIAR with predators as the fourth prey source
 ##
 ## Author: Gen-Chang Hsu
 ##
@@ -23,6 +23,7 @@ library(tidyverse)
 library(vegan)
 library(magrittr)
 library(MixSIAR)
+library(sp)
 
 
 # Import files -----------------------------------------------------------------
@@ -41,14 +42,13 @@ detritivore <- c("CHI", "SCI", "MUS", "EPH", "EMP", "STR", "CHL", "TER")
 
 SID_all_clean <- filter(SID_all_clean, Stage != "Seedling")  # filter out seedling stage
 
-predator_data <- SID_all_clean %>%
-  filter(Family %in% predator)
-
 spider_data <- SID_all_clean %>%
   filter(Family %in% spider)
 
 ladybeetle_data <- SID_all_clean %>%
   filter(Family %in% ladybeetle)
+
+predator_data <- bind_rows(spider_data, ladybeetle_data)
 
 rice_herb_data <- SID_all_clean %>%
   filter(Family %in% rice_herb)
@@ -59,33 +59,23 @@ tour_herb_data <- SID_all_clean %>%
 detritivore_data <- SID_all_clean %>%
   filter(Family %in% detritivore)
 
-rice_herb_data %>% 
-  filter(Family == "CIC" | Family == "DEL")
+### Find the predator individuals within the prey mixing polygon
+prey_SI_summary <- SID_all_clean %>% 
+  filter(Stage != "Seedling") %>% 
+  mutate(Prey_source = case_when(Family %in% rice_herb ~ "Rice_herb",
+                                 Family %in% tour_herb ~ "Tour_herb",
+                                 Family %in% detritivore ~ "Detritivore",
+                                 T ~ "Non")) %>% 
+  filter(Prey_source != "Non") %>% 
+  mutate(Prey_source = factor(Prey_source, levels = c("Rice_herb", "Tour_herb", "Detritivore"), ordered = T)) %>% 
+  group_by(Prey_source) %>% 
+  summarise(mean_d13C = mean(d13C),
+            mean_d15N = mean(d15N))
 
-### Number of spider and ladybeetle capsules
-nrow(spider_data)
-nrow(ladybeetle_data)
+predator_in_prey_polygon <- point.in.polygon(predator_data$d13C, predator_data$d15N,
+                 prey_SI_summary$mean_d13C, prey_SI_summary$mean_d15N) == 1
 
-### Number of capsules for each family in each study year
-predator_data %>% 
-  group_by(Year, Family) %>% 
-  summarise(n = n())
-
-rice_herb_data %>% 
-  group_by(Year, Family) %>% 
-  summarise(n = n())
-
-tour_herb_data %>% 
-  group_by(Year, Family) %>% 
-  summarise(n = n())
-
-detritivore_data %>% 
-  group_by(Year, Family) %>% 
-  summarise(n = n()) %>% 
-  print(n = 25)
-
-nrow(predator_data)
-nrow(rice_herb_data) + nrow(tour_herb_data) + nrow(detritivore_data)
+predator_as_prey_data <- predator_data[predator_in_prey_polygon, ]
 
 
 # 2. Preparation of consumer data ----------------------------------------------
@@ -134,11 +124,11 @@ mix_siar_ladybeetle <- load_mix_data(filename = "Output/Temp_IGP/mixture_ladybee
 
 
 # 3. Preparation of source data ------------------------------------------------
-source <- list(rice_herb_data, tour_herb_data, detritivore_data) %>% 
+source <- list(rice_herb_data, tour_herb_data, detritivore_data, predator_as_prey_data) %>% 
   map(., function(x){
     select(x, d13C, d15N, Concd13C = C_conc, Concd15N = N_conc, Farm)
   }) %>%
-  `names<-`(c("Rice_herb", "Tour_herb", "Detritivore")) %>%
+  `names<-`(c("Rice_herb", "Tour_herb", "Detritivore", "Predator")) %>%
   bind_rows(.id = "Source")
 
 write.csv(source, "Output/Temp_IGP/source.csv", row.names = FALSE)
@@ -162,13 +152,17 @@ source_mix_siar_ladybeetle <- load_source_data(filename = "Output/Temp_IGP/sourc
                                            mix_siar_ladybeetle)
 
 
-
 # 4. Preparation of C and N trophic discrimination factors ---------------------
-TDF <- tibble(Source = c("Rice_herb", "Tour_herb", "Detritivore")) %>% 
-  mutate(Meand13C = c(1.38, 0.94, 0.05), 
-         SDd13C = c(0.22, 0.18, 0.09),
-         Meand15N = c(1.5, 1.4, 2.03),
-         SDd15N = c(0.39, 0.3, 0.24))
+TDF_C_fun <- function(x){-0.113*x - 1.916}
+TDF_N_fun <- function(x){-0.311*x + 4.065}
+
+TDF <- source %>% 
+  group_by(Source) %>%
+  summarise(Meand13C = mean(TDF_C_fun(d13C)), SDd13C = sd(TDF_C_fun(d13C)),
+            Meand15N = mean(TDF_N_fun(d15N)), SDd15N = sd(TDF_N_fun(d15N)))
+
+TDF <- TDF %>%
+  rows_update(., tibble(Source = "Predator", Meand13C = 0.5, SDd13C = 0.13, Meand15N = 1.4, SDd15N = 0.2))
 
 write.csv(TDF, "Output/Temp_IGP/TDF.csv", row.names = F)
 
@@ -225,7 +219,7 @@ jags_ladybeetle <- run_model(run = "short",
                              process_err)
 
 ### Evaluate JAGS outputs
-setwd("./Output/Temp_IGP/JAGS")
+# setwd("./Output/Temp_IGP/JAGS")
 options(max.print = 1000000)
 
 output_JAGS_predator <- 
@@ -297,12 +291,12 @@ output_JAGS(jags_ladybeetle, mix_siar_ladybeetle, source_mix_siar_ladybeetle,
                                   plot_pairs_save_png = F,
                                   plot_xy_save_png = F))
 
-setwd("../..")
+setwd("../../..")
 
 
 # 6. Organize the raw mixing model outputs -------------------------------------
 model_out_predator_raw <- read.table("Output/Temp_IGP/JAGS/model_out_predator.txt", header = F, fill = TRUE)
-model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], model_out_predator_raw[290:571, 2]) %>%
+model_out_predator_clean <- bind_cols(model_out_predator_raw[5:372, c(1:4, 7)], model_out_predator_raw[376:743, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "All") %>% 
   separate(col = ID, into = c("P", "Farm", "Stage", "Source"), sep = "\\.") %>%
@@ -313,7 +307,7 @@ model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], 
   select(Predator, Source, Mean, SD, `2.5%`, `50%`, `97.5%`, Farmtype, Stage, Year, Farm_ID)
 
 model_out_spider_raw <- read.table("Output/Temp_IGP/JAGS/model_out_spider.txt", header = F, fill = TRUE)
-model_out_spider_clean <- bind_cols(model_out_spider_raw[5:262, c(1:4, 7)], model_out_spider_raw[266:523, 2]) %>%
+model_out_spider_clean <- bind_cols(model_out_spider_raw[5:312, c(1:4, 7)], model_out_spider_raw[316:623, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "Spider") %>% 
   separate(col = ID, into = c("P", "Farm", "Stage", "Source"), sep = "\\.") %>%
@@ -324,7 +318,7 @@ model_out_spider_clean <- bind_cols(model_out_spider_raw[5:262, c(1:4, 7)], mode
   select(Predator, Source, Mean, SD, `2.5%`, `50%`, `97.5%`, Farmtype, Stage, Year, Farm_ID)
 
 model_out_ladybeetle_raw <- read.table("Output/Temp_IGP/JAGS/model_out_ladybeetle.txt", header = F, fill = TRUE)
-model_out_ladybeetle_clean <- bind_cols(model_out_ladybeetle_raw[5:175, c(1:4, 7)], model_out_ladybeetle_raw[179:349, 2]) %>%
+model_out_ladybeetle_clean <- bind_cols(model_out_ladybeetle_raw[5:232, c(1:4, 7)], model_out_ladybeetle_raw[236:463, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "Ladybeetle") %>% 
   separate(col = ID, into = c("P", "Farm", "Stage", "Source"), sep = "\\.") %>%
@@ -336,7 +330,7 @@ model_out_ladybeetle_clean <- bind_cols(model_out_ladybeetle_raw[5:175, c(1:4, 7
 
 model_out_clean <- bind_rows(model_out_predator_clean, model_out_spider_clean, model_out_ladybeetle_clean) %>% 
   mutate(Predator = ordered(Predator, levels = c("All", "Spider", "Ladybeetle")),
-         Source = ordered(Source, levels = c("Rice_herb", "Tour_herb", "Detritivore")),
+         Source = ordered(Source, levels = c("Rice_herb", "Tour_herb", "Detritivore", "Predator")),
          Farmtype = ordered(Farmtype, levels = c("Or", "Cv")),
          Stage = ordered(Stage, levels = c("Tillering", "Flowering", "Ripening"))) %>%
   mutate_at(.vars = c("Mean", "SD", "2.5%", "50%", "97.5%"), as.numeric) %>%
@@ -344,43 +338,7 @@ model_out_clean <- bind_rows(model_out_predator_clean, model_out_spider_clean, m
   mutate(Farm_ID = plyr::mapvalues(Farm_ID, from = c("MO", "MC", "GO", "GC", "OO", "OC"), 
                                    to = c("MO1", "MC1", "LO1", "LC1", "SO1", "SC1")))
 
-write_rds(model_out_clean, "Output/Data_clean/Temp_IGP/model_out_clean.rds")
-
-### Write the posterior estimates as supplementary material
-model_out_clean_supplementary <- model_out_clean %>% 
-  select(Year, Predator, Farm_ID, Stage, Source, Mean, SD, Median = `50%`, Lower = `2.5%`, Upper = `97.5%`) %>% 
-  arrange(Year, Predator, Farm_ID, Stage, Source) %>% 
-  mutate(Predator = case_when(Predator == "All" ~ "Both",
-                              TRUE ~ Predator),
-         Source = case_when(Source == "Rice_herb" ~ "Rice herbivore",
-                            Source == "Tour_herb" ~ "Tourist herbivore",
-                            TRUE ~ Source))
-
-write_csv(model_out_clean_supplementary, "Output/Data_clean/Temp_IGP/model_out_clean_supplementary.csv")
-
-### Number of farms * stage * year estimates for "both predators", "spider only", and "ladybeetle only" models 
-model_out_clean_supplementary %>% 
-  group_by(Predator) %>% 
-  distinct(Year, Stage, Farm_ID) %>% 
-  group_by(Predator) %>% 
-  summarise(n = n())
-
-
-# 7. Extract the posterior draws in the predator model -------------------------
-Posterior_draws_predator <- lapply(1:34, function(farm){  # 34 individual farm and year combinations
-  lapply(1:3, function(stage){  # three crop stages 
-      output_JAGS_predator[, farm, stage, ] %>% 
-        as.data.frame() %>% 
-        `names<-`(c("Detritivore", "Rice_herb", "Tour_herb")) %>% 
-        gather(key = "Prey_source", value = "Draw")
-    }) %>% `names<-`(c("Flowering", "Ripening", "Tillering")) %>% 
-      bind_rows(.id = "Stage")
-  })
-
-names(Posterior_draws_predator) <- Farm_ID
-
-write_rds(Posterior_draws_predator, "Output/Data_clean/Temp_IGP/Posterior_draws_predator.rds")
-
+write_rds(model_out_clean, "Output/Temp_IGP/model_out_clean.rds")
 
 # ggplot theme -----------------------------------------------------------------
 my_theme <- 
@@ -421,12 +379,6 @@ my_theme <-
     strip.background = element_rect(fill = "transparent"),
     strip.text = element_text(size = 12, hjust = 0.5)
   )
-
-
-# Import files -----------------------------------------------------------------
-SID_all_clean <- readRDS("Output/Data_clean/Temp_IGP/SID_all_clean.rds")
-model_out_clean <- readRDS("Output/Data_clean/Temp_IGP/model_out_clean.rds")
-Posterior_draws_predator <- readRDS("Output/Data_clean/Temp_IGP/Posterior_draws_predator.rds")
 
 # 1. Line charts of dietary proportions of predators ---------------------------
 ### Create a data frame for panel labels
@@ -472,5 +424,46 @@ model_out_clean %>%
         strip.background.y = element_rect(fill = "grey80"))
 
 ggsave("Output/Data_clean/Temp_IGP/Diet_proportion.tiff", width = 6, height = 7, dpi = 600)
+
+### Both predators only
+model_out_clean %>% 
+  filter(Predator == "All") %>% 
+  group_by(Predator, Farmtype, Stage, Source) %>%
+  summarise(Proportion = mean(`50%`, na.rm = T),
+            n = n(),
+            SD = sd(`50%`),
+            SE = SD/sqrt(n)) %>%
+  ggplot(aes(x = Stage, y = Proportion, color = Source, shape = Source, group = Source)) +
+  geom_line(position = position_dodge(0.1), size = 1.2) +
+  geom_point(position = position_dodge(0.1), size = 3) + 
+  geom_errorbar(aes(ymin = Proportion - SE, ymax = Proportion + SE), 
+                position = position_dodge(0.1), 
+                width = 0.3) +
+  facet_grid(~ Farmtype, labeller = as_labeller(c("Or" = "Organic", "Cv" = "Conventional"))) + 
+  # geom_text(data = label1, aes(x = x, y = y, label = Label), size = 5, color = "black", nudge_x = -0.5) +
+  coord_cartesian(ylim = c(0, 1), clip = "off") +
+  xlab("Crop stage") +
+  ylab("Proportion (mean ± SE)") +
+  scale_color_manual(values = c("#00BA38", "#619CFF", "#993300", "black"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore", "Predator"), name = "") +
+  scale_shape_manual(values = c(16, 15, 17, 18), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore", "Predator"), name = "") +
+  scale_y_continuous(expand = c(0, 0)) +
+  my_theme + 
+  theme(panel.spacing.x = unit(0, "lines"),
+        panel.spacing.y = unit(2, "lines"),
+        legend.direction = "horizontal",
+        legend.key.width = unit(0.6, "in"),
+        legend.text = element_text(margin = margin(l = 4)),
+        legend.position = "bottom",
+        legend.key.spacing.x = unit(0.2, "in"),
+        strip.background.y = element_rect(fill = "grey80"))
+
+ggsave("./Output/Temp_IGP/Diet_proportion_both.tiff", width = 6, height = 4, dpi = 600)
+
+
+
+
+
+
+
 
 
