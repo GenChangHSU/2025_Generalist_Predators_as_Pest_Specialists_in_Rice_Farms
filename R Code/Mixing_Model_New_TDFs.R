@@ -107,25 +107,25 @@ mixture_ladybeetle <-
              Farm = factor(ladybeetle_data$Farm),
              Stage = factor(ladybeetle_data$Stage, levels = c("Tillering", "Flowering", "Ripening"), ordered = T))
 
-write.csv(mixture_predator, "Output/Temp/mixture_predator.csv", row.names = FALSE)
-write.csv(mixture_spider, "Output/Temp/mixture_spider.csv", row.names = FALSE)
-write.csv(mixture_ladybeetle, "Output/Temp/mixture_ladybeetle.csv", row.names = FALSE)
+write.csv(mixture_predator, "Output/Temp_TDFs/mixture_predator.csv", row.names = FALSE)
+write.csv(mixture_spider, "Output/Temp_TDFs/mixture_spider.csv", row.names = FALSE)
+write.csv(mixture_ladybeetle, "Output/Temp_TDFs/mixture_ladybeetle.csv", row.names = FALSE)
 
-mix_siar_predator <- load_mix_data(filename = "Output/Temp/mixture_predator.csv",
+mix_siar_predator <- load_mix_data(filename = "Output/Temp_TDFs/mixture_predator.csv",
                                    iso_names = c("d13C","d15N"),
                                    factors = c("Farm", "Stage"),
                                    fac_random = c(F, F),
                                    fac_nested = c(F, F),
                                    cont_effects = NULL)
 
-mix_siar_spider <- load_mix_data(filename = "Output/Temp/mixture_spider.csv",
+mix_siar_spider <- load_mix_data(filename = "Output/Temp_TDFs/mixture_spider.csv",
                                  iso_names = c("d13C","d15N"),
                                  factors = c("Farm", "Stage"),
                                  fac_random = c(F, F),
                                  fac_nested = c(F, F),
                                  cont_effects = NULL)
 
-mix_siar_ladybeetle <- load_mix_data(filename = "Output/Temp/mixture_ladybeetle.csv",
+mix_siar_ladybeetle <- load_mix_data(filename = "Output/Temp_TDFs/mixture_ladybeetle.csv",
                                      iso_names = c("d13C","d15N"),
                                      factors = c("Farm", "Stage"),
                                      fac_random = c(F, F),
@@ -141,21 +141,21 @@ source <- list(rice_herb_data, tour_herb_data, detritivore_data) %>%
   `names<-`(c("Rice_herb", "Tour_herb", "Detritivore")) %>%
   bind_rows(.id = "Source")
 
-write.csv(source, "Output/Temp/source.csv", row.names = FALSE)
+write.csv(source, "Output/Temp_TDFs/source.csv", row.names = FALSE)
 
-source_mix_siar_predator <- load_source_data(filename = "Output/Temp/source.csv",
+source_mix_siar_predator <- load_source_data(filename = "Output/Temp_TDFs/source.csv",
                            source_factors = NULL,
                            conc_dep = TRUE,
                            data_type = "raw",
                            mix_siar_predator)
 
-source_mix_siar_spider <- load_source_data(filename = "Output/Temp/source.csv",
+source_mix_siar_spider <- load_source_data(filename = "Output/Temp_TDFs/source.csv",
                                              source_factors = NULL,
                                              conc_dep = TRUE,
                                              data_type = "raw",
                                              mix_siar_spider)
 
-source_mix_siar_ladybeetle <- load_source_data(filename = "Output/Temp/source.csv",
+source_mix_siar_ladybeetle <- load_source_data(filename = "Output/Temp_TDFs/source.csv",
                                            source_factors = NULL,
                                            conc_dep = TRUE,
                                            data_type = "raw",
@@ -170,25 +170,17 @@ TDF <- tibble(Source = c("Rice_herb", "Tour_herb", "Detritivore")) %>%
          Meand15N = c(1.5, 1.4, 2.03),
          SDd15N = c(0.39, 0.3, 0.24))
 
-write.csv(TDF, "Output/Temp/TDF.csv", row.names = F)
+write.csv(TDF, "Output/Temp_TDFs/TDF.csv", row.names = F)
 
-TDF_out <- TDF %>% 
-  mutate(across(where(is.numeric), ~ round(.x, 1))) %>% 
-  mutate(Mean_SD_d13C = str_c(Meand13C, SDd13C, sep = " ± "),
-         Mean_SD_d15N = str_c(Meand15N, SDd15N, sep = " ± ")) %>% 
-  select(Source, Mean_SD_d13C, Mean_SD_d15N)
-
-write.csv(TDF_out, "Output/Temp/TDF_Out.csv", row.names = F)
-
-discr_mix_siar_predator <- load_discr_data(filename = "Output/Temp/TDF.csv", mix_siar_predator)
-discr_mix_siar_spider <- load_discr_data(filename = "Output/Temp/TDF.csv", mix_siar_spider)
-discr_mix_siar_ladybeetle <- load_discr_data(filename = "Output/Temp/TDF.csv", mix_siar_ladybeetle)
+discr_mix_siar_predator <- load_discr_data(filename = "Output/Temp_TDFs/TDF.csv", mix_siar_predator)
+discr_mix_siar_spider <- load_discr_data(filename = "Output/Temp_TDFs/TDF.csv", mix_siar_spider)
+discr_mix_siar_ladybeetle <- load_discr_data(filename = "Output/Temp_TDFs/TDF.csv", mix_siar_ladybeetle)
 
 
 # 5. Run the mixing models using JAGS -------------------------------------------
 ### Write JAGS files
 dr <- getwd()
-setwd(dir = paste0(dr, "/Output/Temp/JAGS"))
+setwd(dir = paste0(dr, "/Output/Temp_TDFs/JAGS"))
 
 resid_err <- T
 process_err <- T
@@ -225,7 +217,7 @@ jags_ladybeetle <- run_model(run = "short",
                              process_err)
 
 ### Evaluate JAGS outputs
-# setwd("./Output/Temp/JAGS")
+# setwd("./Output/Temp_TDFs/JAGS")
 options(max.print = 1000000)
 
 output_JAGS_predator <- 
@@ -301,7 +293,7 @@ setwd("../..")
 
 
 # 6. Organize the raw mixing model outputs -------------------------------------
-model_out_predator_raw <- read.table("./Temp/JAGS/model_out_predator.txt", header = F, fill = TRUE)
+model_out_predator_raw <- read.table("./Temp_TDFs/JAGS/model_out_predator.txt", header = F, fill = TRUE)
 model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], model_out_predator_raw[290:571, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "All") %>% 
@@ -312,7 +304,7 @@ model_out_predator_clean <- bind_cols(model_out_predator_raw[5:286, c(1:4, 7)], 
          Farmtype = plyr::mapvalues(Farmtype, from = c("C", "O"), to = c("Cv", "Or"))) %>%
   select(Predator, Source, Mean, SD, `2.5%`, `50%`, `97.5%`, Farmtype, Stage, Year, Farm_ID)
 
-model_out_spider_raw <- read.table("./Temp/JAGS/model_out_spider.txt", header = F, fill = TRUE)
+model_out_spider_raw <- read.table("./Temp_TDFs/JAGS/model_out_spider.txt", header = F, fill = TRUE)
 model_out_spider_clean <- bind_cols(model_out_spider_raw[5:262, c(1:4, 7)], model_out_spider_raw[266:523, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "Spider") %>% 
@@ -323,7 +315,7 @@ model_out_spider_clean <- bind_cols(model_out_spider_raw[5:262, c(1:4, 7)], mode
          Farmtype = plyr::mapvalues(Farmtype, from = c("C", "O"), to = c("Cv", "Or"))) %>%
   select(Predator, Source, Mean, SD, `2.5%`, `50%`, `97.5%`, Farmtype, Stage, Year, Farm_ID)
 
-model_out_ladybeetle_raw <- read.table("./Temp/JAGS/model_out_ladybeetle.txt", header = F, fill = TRUE)
+model_out_ladybeetle_raw <- read.table("./Temp_TDFs/JAGS/model_out_ladybeetle.txt", header = F, fill = TRUE)
 model_out_ladybeetle_clean <- bind_cols(model_out_ladybeetle_raw[5:175, c(1:4, 7)], model_out_ladybeetle_raw[179:349, 2]) %>%
   `names<-`(c("ID", "Mean", "SD", "2.5%", "50%", "97.5%")) %>%
   mutate(Predator = "Ladybeetle") %>% 
@@ -344,43 +336,7 @@ model_out_clean <- bind_rows(model_out_predator_clean, model_out_spider_clean, m
   mutate(Farm_ID = plyr::mapvalues(Farm_ID, from = c("MO", "MC", "GO", "GC", "OO", "OC"), 
                                    to = c("MO1", "MC1", "LO1", "LC1", "SO1", "SC1")))
 
-write_rds(model_out_clean, "./Temp/model_out_clean.rds")
-
-### Write the posterior estimates as supplementary material
-model_out_clean_supplementary <- model_out_clean %>% 
-  select(Year, Predator, Farm_ID, Stage, Source, Mean, SD, Median = `50%`, Lower = `2.5%`, Upper = `97.5%`) %>% 
-  arrange(Year, Predator, Farm_ID, Stage, Source) %>% 
-  mutate(Predator = case_when(Predator == "All" ~ "Both",
-                              TRUE ~ Predator),
-         Source = case_when(Source == "Rice_herb" ~ "Rice herbivore",
-                            Source == "Tour_herb" ~ "Tourist herbivore",
-                            TRUE ~ Source))
-
-write_csv(model_out_clean_supplementary, "./Temp/model_out_clean_supplementary.csv")
-
-### Number of farms * stage * year estimates for "both predators", "spider only", and "ladybeetle only" models 
-model_out_clean_supplementary %>% 
-  group_by(Predator) %>% 
-  distinct(Year, Stage, Farm_ID) %>% 
-  group_by(Predator) %>% 
-  summarise(n = n())
-
-
-# 7. Extract the posterior draws in the predator model -------------------------
-Posterior_draws_predator <- lapply(1:34, function(farm){  # 34 individual farm and year combinations
-  lapply(1:3, function(stage){  # three crop stages 
-      output_JAGS_predator[, farm, stage, ] %>% 
-        as.data.frame() %>% 
-        `names<-`(c("Detritivore", "Rice_herb", "Tour_herb")) %>% 
-        gather(key = "Prey_source", value = "Draw")
-    }) %>% `names<-`(c("Flowering", "Ripening", "Tillering")) %>% 
-      bind_rows(.id = "Stage")
-  })
-
-names(Posterior_draws_predator) <- Farm_ID
-
-write_rds(Posterior_draws_predator, "./Temp/Posterior_draws_predator.rds")
-
+write_rds(model_out_clean, "./Temp_TDFs/model_out_clean.rds")
 
 # ggplot theme -----------------------------------------------------------------
 my_theme <- 
@@ -422,11 +378,6 @@ my_theme <-
     strip.text = element_text(size = 12, hjust = 0.5)
   )
 
-
-# Import files -----------------------------------------------------------------
-SID_all_clean <- readRDS("./Temp/SID_all_clean.rds")
-model_out_clean <- readRDS("./Temp/model_out_clean.rds")
-Posterior_draws_predator <- readRDS("./Temp/Posterior_draws_predator.rds")
 
 # 1. Line charts of dietary proportions of predators ---------------------------
 ### Create a data frame for panel labels
@@ -471,7 +422,7 @@ model_out_clean %>%
         legend.position = "top",
         strip.background.y = element_rect(fill = "grey80"))
 
-ggsave("./Temp/Diet_proportion.tiff", width = 6, height = 7, dpi = 600)
+ggsave("./Temp_TDFs/Diet_proportion.tiff", width = 6, height = 7, dpi = 600)
 
 ### Both predators only
 model_out_clean %>% 
@@ -506,7 +457,7 @@ model_out_clean %>%
         legend.key.spacing.x = unit(0.2, "in"),
         strip.background.y = element_rect(fill = "grey80"))
 
-ggsave("./Temp/Diet_proportion_both.tiff", width = 6, height = 4.2, dpi = 600)
+ggsave("./Temp_TDFs/Diet_proportion_TDFs.tiff", width = 6, height = 4.2, dpi = 600)
 
 
 

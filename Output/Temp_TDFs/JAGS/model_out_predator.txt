@@ -1,0 +1,577 @@
+
+#################################################################
+# Summary Statistics
+#################################################################
+
+DIC = 5681.071
+
+                                  Mean    SD  2.5%    5%   25%   50%   75%   95%
+Epsilon.1                        0.416 0.070 0.291 0.306 0.365 0.413 0.465 0.534
+Epsilon.2                        0.526 0.058 0.420 0.435 0.486 0.523 0.563 0.623
+p.GC_2017.Tillering.Detritivore  0.514 0.120 0.311 0.333 0.424 0.506 0.601 0.720
+p.GC_2017.Tillering.Rice_herb    0.240 0.061 0.135 0.148 0.195 0.235 0.279 0.346
+p.GC_2017.Tillering.Tour_herb    0.246 0.110 0.060 0.077 0.157 0.240 0.330 0.428
+p.GC_2017.Flowering.Detritivore  0.092 0.042 0.028 0.034 0.061 0.085 0.115 0.173
+p.GC_2017.Flowering.Rice_herb    0.798 0.064 0.664 0.685 0.755 0.803 0.845 0.895
+p.GC_2017.Flowering.Tour_herb    0.111 0.067 0.023 0.029 0.059 0.095 0.149 0.241
+p.GC_2017.Ripening.Detritivore   0.096 0.046 0.017 0.029 0.064 0.090 0.123 0.180
+p.GC_2017.Ripening.Rice_herb     0.850 0.049 0.742 0.762 0.821 0.855 0.883 0.921
+p.GC_2017.Ripening.Tour_herb     0.054 0.032 0.014 0.018 0.033 0.048 0.068 0.113
+p.GO_2017.Tillering.Detritivore  0.283 0.143 0.061 0.086 0.179 0.264 0.369 0.548
+p.GO_2017.Tillering.Rice_herb    0.420 0.139 0.176 0.205 0.320 0.410 0.511 0.663
+p.GO_2017.Tillering.Tour_herb    0.297 0.149 0.039 0.061 0.183 0.291 0.401 0.554
+p.GO_2017.Flowering.Detritivore  0.035 0.028 0.004 0.006 0.015 0.027 0.046 0.092
+p.GO_2017.Flowering.Rice_herb    0.874 0.068 0.718 0.749 0.833 0.885 0.925 0.965
+p.GO_2017.Flowering.Tour_herb    0.091 0.064 0.009 0.013 0.042 0.077 0.126 0.213
+p.GO_2017.Ripening.Detritivore   0.036 0.029 0.003 0.005 0.016 0.028 0.049 0.096
+p.GO_2017.Ripening.Rice_herb     0.917 0.046 0.807 0.830 0.891 0.926 0.952 0.976
+p.GO_2017.Ripening.Tour_herb     0.047 0.036 0.004 0.007 0.020 0.037 0.063 0.118
+p.LC1_2018.Tillering.Detritivore 0.407 0.172 0.098 0.136 0.285 0.400 0.519 0.707
+p.LC1_2018.Tillering.Rice_herb   0.343 0.145 0.100 0.125 0.233 0.334 0.440 0.598
+p.LC1_2018.Tillering.Tour_herb   0.250 0.182 0.016 0.027 0.097 0.211 0.369 0.603
+p.LC1_2018.Flowering.Detritivore 0.063 0.052 0.007 0.011 0.028 0.049 0.082 0.161
+p.LC1_2018.Flowering.Rice_herb   0.836 0.117 0.527 0.608 0.786 0.867 0.918 0.960
+p.LC1_2018.Flowering.Tour_herb   0.101 0.112 0.005 0.007 0.027 0.062 0.138 0.326
+p.LC1_2018.Ripening.Detritivore  0.064 0.049 0.005 0.009 0.030 0.053 0.085 0.158
+p.LC1_2018.Ripening.Rice_herb    0.887 0.071 0.730 0.765 0.853 0.900 0.937 0.970
+p.LC1_2018.Ripening.Tour_herb    0.049 0.056 0.002 0.004 0.014 0.032 0.065 0.147
+p.LC1_2019.Tillering.Detritivore 0.216 0.086 0.068 0.087 0.155 0.211 0.269 0.364
+p.LC1_2019.Tillering.Rice_herb   0.458 0.090 0.278 0.315 0.396 0.456 0.519 0.606
+p.LC1_2019.Tillering.Tour_herb   0.326 0.097 0.132 0.167 0.262 0.321 0.388 0.490
+p.LC1_2019.Flowering.Detritivore 0.023 0.016 0.004 0.005 0.012 0.020 0.030 0.054
+p.LC1_2019.Flowering.Rice_herb   0.884 0.059 0.748 0.771 0.851 0.893 0.927 0.962
+p.LC1_2019.Flowering.Tour_herb   0.093 0.057 0.014 0.020 0.049 0.083 0.125 0.201
+p.LC1_2019.Ripening.Detritivore  0.024 0.017 0.003 0.004 0.012 0.020 0.032 0.055
+p.LC1_2019.Ripening.Rice_herb    0.928 0.039 0.835 0.857 0.908 0.937 0.955 0.975
+p.LC1_2019.Ripening.Tour_herb    0.048 0.034 0.008 0.010 0.023 0.039 0.064 0.116
+p.LC2_2018.Tillering.Detritivore 0.469 0.192 0.110 0.152 0.331 0.468 0.610 0.782
+p.LC2_2018.Tillering.Rice_herb   0.289 0.150 0.062 0.079 0.176 0.265 0.386 0.565
+p.LC2_2018.Tillering.Tour_herb   0.242 0.165 0.019 0.031 0.113 0.210 0.342 0.561
+p.LC2_2018.Ripening.Detritivore  0.093 0.078 0.007 0.011 0.038 0.071 0.126 0.246
+p.LC2_2018.Ripening.Rice_herb    0.846 0.105 0.583 0.647 0.793 0.870 0.925 0.966
+p.LC2_2018.Ripening.Tour_herb    0.060 0.070 0.003 0.005 0.018 0.038 0.076 0.192
+p.LC2_2019.Tillering.Detritivore 0.575 0.127 0.335 0.376 0.489 0.574 0.661 0.791
+p.LC2_2019.Tillering.Rice_herb   0.286 0.109 0.086 0.112 0.206 0.284 0.361 0.467
+p.LC2_2019.Tillering.Tour_herb   0.140 0.098 0.016 0.022 0.066 0.119 0.189 0.325
+p.LC2_2019.Flowering.Detritivore 0.103 0.068 0.021 0.027 0.056 0.087 0.132 0.241
+p.LC2_2019.Flowering.Rice_herb   0.830 0.095 0.596 0.639 0.784 0.852 0.898 0.944
+p.LC2_2019.Flowering.Tour_herb   0.066 0.066 0.004 0.006 0.021 0.045 0.089 0.198
+p.LC3_2018.Tillering.Detritivore 0.299 0.110 0.094 0.126 0.227 0.294 0.369 0.494
+p.LC3_2018.Tillering.Rice_herb   0.578 0.106 0.357 0.397 0.513 0.580 0.649 0.749
+p.LC3_2018.Tillering.Tour_herb   0.122 0.091 0.012 0.018 0.056 0.101 0.165 0.304
+p.LC3_2018.Flowering.Detritivore 0.027 0.019 0.005 0.006 0.014 0.023 0.036 0.061
+p.LC3_2018.Flowering.Rice_herb   0.943 0.036 0.846 0.876 0.929 0.951 0.966 0.982
+p.LC3_2018.Flowering.Tour_herb   0.030 0.031 0.002 0.003 0.009 0.020 0.038 0.089
+p.LC3_2018.Ripening.Detritivore  0.028 0.020 0.003 0.005 0.014 0.024 0.037 0.064
+p.LC3_2018.Ripening.Rice_herb    0.958 0.025 0.896 0.912 0.947 0.963 0.975 0.988
+p.LC3_2018.Ripening.Tour_herb    0.014 0.016 0.001 0.002 0.005 0.009 0.018 0.043
+p.LC3_2019.Tillering.Detritivore 0.639 0.094 0.460 0.486 0.573 0.638 0.708 0.793
+p.LC3_2019.Tillering.Rice_herb   0.258 0.080 0.114 0.132 0.200 0.252 0.313 0.396
+p.LC3_2019.Tillering.Tour_herb   0.103 0.067 0.012 0.018 0.052 0.090 0.139 0.232
+p.LC3_2019.Flowering.Detritivore 0.116 0.057 0.034 0.042 0.074 0.107 0.148 0.222
+p.LC3_2019.Flowering.Rice_herb   0.834 0.070 0.669 0.708 0.793 0.845 0.886 0.929
+p.LC3_2019.Flowering.Tour_herb   0.050 0.045 0.004 0.006 0.018 0.037 0.066 0.139
+p.LC3_2019.Ripening.Detritivore  0.116 0.058 0.024 0.036 0.075 0.108 0.151 0.221
+p.LC3_2019.Ripening.Rice_herb    0.859 0.062 0.719 0.749 0.821 0.869 0.904 0.946
+p.LC3_2019.Ripening.Tour_herb    0.024 0.022 0.002 0.003 0.009 0.018 0.032 0.068
+p.LO1_2018.Tillering.Detritivore 0.347 0.128 0.119 0.151 0.259 0.339 0.423 0.570
+p.LO1_2018.Tillering.Rice_herb   0.301 0.117 0.091 0.121 0.217 0.294 0.376 0.504
+p.LO1_2018.Tillering.Tour_herb   0.353 0.142 0.082 0.122 0.257 0.348 0.445 0.593
+p.LO1_2018.Flowering.Detritivore 0.055 0.039 0.009 0.013 0.028 0.046 0.071 0.129
+p.LO1_2018.Flowering.Rice_herb   0.793 0.124 0.479 0.547 0.733 0.819 0.883 0.943
+p.LO1_2018.Flowering.Tour_herb   0.152 0.117 0.016 0.023 0.065 0.122 0.207 0.388
+p.LO1_2018.Ripening.Detritivore  0.058 0.040 0.008 0.012 0.030 0.050 0.076 0.136
+p.LO1_2018.Ripening.Rice_herb    0.858 0.094 0.607 0.681 0.822 0.881 0.921 0.957
+p.LO1_2018.Ripening.Tour_herb    0.084 0.082 0.009 0.012 0.032 0.061 0.105 0.241
+p.LO1_2019.Tillering.Detritivore 0.245 0.132 0.048 0.071 0.152 0.226 0.315 0.493
+p.LO1_2019.Tillering.Rice_herb   0.574 0.135 0.270 0.330 0.494 0.583 0.667 0.777
+p.LO1_2019.Tillering.Tour_herb   0.181 0.113 0.019 0.030 0.094 0.163 0.247 0.384
+p.LO1_2019.Flowering.Detritivore 0.025 0.026 0.003 0.004 0.010 0.018 0.030 0.072
+p.LO1_2019.Flowering.Rice_herb   0.930 0.052 0.792 0.831 0.909 0.943 0.966 0.983
+p.LO1_2019.Flowering.Tour_herb   0.046 0.045 0.003 0.004 0.015 0.032 0.062 0.132
+p.LO1_2019.Ripening.Detritivore  0.025 0.027 0.002 0.003 0.009 0.017 0.031 0.071
+p.LO1_2019.Ripening.Rice_herb    0.952 0.037 0.854 0.882 0.939 0.962 0.977 0.989
+p.LO1_2019.Ripening.Tour_herb    0.023 0.023 0.002 0.002 0.007 0.015 0.029 0.065
+p.LO2_2018.Tillering.Detritivore 0.547 0.148 0.234 0.294 0.451 0.550 0.650 0.784
+p.LO2_2018.Tillering.Rice_herb   0.266 0.109 0.091 0.108 0.185 0.255 0.337 0.461
+p.LO2_2018.Tillering.Tour_herb   0.187 0.138 0.015 0.023 0.080 0.156 0.265 0.459
+p.LO2_2018.Flowering.Detritivore 0.101 0.063 0.019 0.026 0.055 0.088 0.130 0.225
+p.LO2_2018.Flowering.Rice_herb   0.810 0.099 0.582 0.622 0.755 0.828 0.885 0.939
+p.LO2_2018.Flowering.Tour_herb   0.089 0.086 0.005 0.008 0.028 0.061 0.122 0.267
+p.LO2_2018.Ripening.Detritivore  0.103 0.063 0.015 0.023 0.058 0.091 0.134 0.221
+p.LO2_2018.Ripening.Rice_herb    0.854 0.072 0.685 0.721 0.812 0.863 0.908 0.951
+p.LO2_2018.Ripening.Tour_herb    0.043 0.043 0.003 0.004 0.015 0.030 0.059 0.124
+p.LO2_2019.Tillering.Detritivore 0.645 0.118 0.414 0.452 0.566 0.644 0.728 0.839
+p.LO2_2019.Tillering.Rice_herb   0.221 0.097 0.050 0.072 0.147 0.216 0.286 0.386
+p.LO2_2019.Tillering.Tour_herb   0.134 0.090 0.015 0.023 0.064 0.116 0.186 0.305
+p.LO2_2019.Flowering.Detritivore 0.144 0.092 0.032 0.039 0.079 0.122 0.183 0.323
+p.LO2_2019.Flowering.Rice_herb   0.779 0.123 0.456 0.540 0.721 0.806 0.868 0.924
+p.LO2_2019.Flowering.Tour_herb   0.078 0.079 0.005 0.008 0.027 0.054 0.100 0.232
+p.LO3_2018.Tillering.Detritivore 0.612 0.146 0.299 0.353 0.523 0.619 0.716 0.838
+p.LO3_2018.Tillering.Rice_herb   0.271 0.113 0.076 0.096 0.187 0.263 0.353 0.468
+p.LO3_2018.Tillering.Tour_herb   0.117 0.131 0.009 0.013 0.036 0.070 0.140 0.417
+p.LO3_2018.Ripening.Detritivore  0.116 0.073 0.016 0.025 0.064 0.101 0.153 0.256
+p.LO3_2018.Ripening.Rice_herb    0.855 0.081 0.660 0.700 0.812 0.872 0.914 0.956
+p.LO3_2018.Ripening.Tour_herb    0.028 0.043 0.001 0.002 0.007 0.014 0.032 0.100
+p.LO3_2019.Tillering.Detritivore 0.383 0.273 0.020 0.029 0.095 0.437 0.636 0.767
+p.LO3_2019.Tillering.Rice_herb   0.557 0.273 0.155 0.181 0.306 0.501 0.840 0.930
+p.LO3_2019.Tillering.Tour_herb   0.060 0.067 0.006 0.010 0.025 0.045 0.075 0.150
+p.LO3_2019.Flowering.Detritivore 0.050 0.051 0.001 0.002 0.006 0.035 0.081 0.149
+p.LO3_2019.Flowering.Rice_herb   0.932 0.062 0.786 0.814 0.895 0.949 0.984 0.995
+p.LO3_2019.Flowering.Tour_herb   0.018 0.027 0.001 0.001 0.005 0.010 0.023 0.058
+p.LO3_2019.Ripening.Detritivore  0.046 0.047 0.001 0.002 0.006 0.030 0.076 0.138
+p.LO3_2019.Ripening.Rice_herb    0.945 0.050 0.823 0.848 0.912 0.960 0.989 0.996
+p.LO3_2019.Ripening.Tour_herb    0.009 0.011 0.000 0.001 0.002 0.005 0.011 0.026
+p.MC_2017.Tillering.Detritivore  0.618 0.166 0.272 0.335 0.503 0.624 0.743 0.874
+p.MC_2017.Tillering.Rice_herb    0.124 0.065 0.040 0.046 0.079 0.111 0.154 0.252
+p.MC_2017.Tillering.Tour_herb    0.258 0.153 0.021 0.035 0.138 0.246 0.358 0.535
+p.MC_2017.Flowering.Detritivore  0.186 0.091 0.036 0.051 0.117 0.179 0.247 0.348
+p.MC_2017.Flowering.Rice_herb    0.631 0.116 0.380 0.428 0.559 0.637 0.710 0.809
+p.MC_2017.Flowering.Tour_herb    0.183 0.123 0.018 0.028 0.089 0.160 0.253 0.422
+p.MC_2017.Ripening.Detritivore   0.201 0.093 0.024 0.044 0.133 0.202 0.266 0.351
+p.MC_2017.Ripening.Rice_herb     0.697 0.099 0.507 0.539 0.632 0.696 0.764 0.866
+p.MC_2017.Ripening.Tour_herb     0.102 0.077 0.009 0.014 0.045 0.085 0.139 0.246
+p.MC1_2018.Tillering.Detritivore 0.295 0.182 0.039 0.054 0.150 0.259 0.416 0.645
+p.MC1_2018.Tillering.Rice_herb   0.598 0.180 0.201 0.264 0.477 0.619 0.736 0.856
+p.MC1_2018.Tillering.Tour_herb   0.106 0.100 0.011 0.016 0.044 0.079 0.135 0.275
+p.MC1_2018.Flowering.Detritivore 0.031 0.035 0.002 0.003 0.009 0.019 0.040 0.106
+p.MC1_2018.Flowering.Rice_herb   0.941 0.052 0.812 0.842 0.924 0.957 0.975 0.989
+p.MC1_2018.Flowering.Tour_herb   0.027 0.038 0.001 0.002 0.007 0.016 0.033 0.087
+p.MC1_2018.Ripening.Detritivore  0.032 0.037 0.001 0.002 0.009 0.020 0.041 0.105
+p.MC1_2018.Ripening.Rice_herb    0.955 0.044 0.833 0.870 0.943 0.968 0.983 0.993
+p.MC1_2018.Ripening.Tour_herb    0.013 0.020 0.001 0.001 0.004 0.007 0.016 0.043
+p.MC1_2019.Tillering.Detritivore 0.350 0.163 0.074 0.106 0.231 0.333 0.454 0.650
+p.MC1_2019.Tillering.Rice_herb   0.457 0.149 0.176 0.213 0.350 0.457 0.560 0.705
+p.MC1_2019.Tillering.Tour_herb   0.194 0.136 0.021 0.029 0.087 0.165 0.270 0.453
+p.MC1_2019.Flowering.Detritivore 0.042 0.035 0.004 0.006 0.018 0.032 0.057 0.110
+p.MC1_2019.Flowering.Rice_herb   0.899 0.062 0.750 0.781 0.865 0.914 0.946 0.973
+p.MC1_2019.Flowering.Tour_herb   0.058 0.054 0.003 0.005 0.020 0.041 0.081 0.166
+p.MC1_2019.Ripening.Detritivore  0.043 0.037 0.003 0.005 0.017 0.033 0.058 0.119
+p.MC1_2019.Ripening.Rice_herb    0.927 0.049 0.803 0.831 0.904 0.939 0.963 0.983
+p.MC1_2019.Ripening.Tour_herb    0.030 0.032 0.002 0.003 0.009 0.020 0.038 0.089
+p.MC2_2018.Tillering.Detritivore 0.196 0.149 0.029 0.039 0.095 0.157 0.248 0.508
+p.MC2_2018.Tillering.Rice_herb   0.638 0.175 0.200 0.294 0.542 0.670 0.763 0.877
+p.MC2_2018.Tillering.Tour_herb   0.165 0.133 0.014 0.022 0.067 0.132 0.224 0.429
+p.MC2_2018.Flowering.Detritivore 0.020 0.029 0.001 0.002 0.006 0.011 0.021 0.064
+p.MC2_2018.Flowering.Rice_herb   0.939 0.062 0.761 0.818 0.926 0.959 0.977 0.990
+p.MC2_2018.Flowering.Tour_herb   0.041 0.052 0.002 0.003 0.011 0.024 0.051 0.138
+p.MC2_2018.Ripening.Detritivore  0.020 0.028 0.001 0.002 0.005 0.011 0.022 0.065
+p.MC2_2018.Ripening.Rice_herb    0.960 0.044 0.833 0.885 0.952 0.973 0.985 0.994
+p.MC2_2018.Ripening.Tour_herb    0.021 0.030 0.001 0.001 0.005 0.011 0.025 0.066
+p.MC2_2019.Tillering.Detritivore 0.478 0.136 0.187 0.239 0.393 0.486 0.569 0.692
+p.MC2_2019.Tillering.Rice_herb   0.392 0.117 0.190 0.217 0.311 0.382 0.460 0.599
+p.MC2_2019.Tillering.Tour_herb   0.130 0.101 0.013 0.019 0.057 0.104 0.175 0.325
+p.MC2_2019.Flowering.Detritivore 0.061 0.032 0.014 0.018 0.037 0.055 0.079 0.123
+p.MC2_2019.Flowering.Rice_herb   0.900 0.043 0.799 0.821 0.874 0.906 0.932 0.960
+p.MC2_2019.Flowering.Tour_herb   0.039 0.032 0.004 0.005 0.016 0.031 0.053 0.104
+p.MC3_2018.Tillering.Detritivore 0.461 0.179 0.124 0.171 0.338 0.451 0.576 0.780
+p.MC3_2018.Tillering.Rice_herb   0.211 0.119 0.042 0.054 0.120 0.192 0.283 0.434
+p.MC3_2018.Tillering.Tour_herb   0.328 0.163 0.042 0.072 0.210 0.323 0.432 0.612
+p.MC3_2018.Flowering.Detritivore 0.108 0.088 0.012 0.017 0.046 0.084 0.144 0.279
+p.MC3_2018.Flowering.Rice_herb   0.709 0.155 0.351 0.407 0.618 0.733 0.828 0.919
+p.MC3_2018.Flowering.Tour_herb   0.182 0.134 0.015 0.024 0.080 0.154 0.253 0.441
+p.MC3_2018.Ripening.Detritivore  0.118 0.096 0.010 0.016 0.048 0.092 0.157 0.306
+p.MC3_2018.Ripening.Rice_herb    0.780 0.132 0.453 0.514 0.707 0.808 0.879 0.944
+p.MC3_2018.Ripening.Tour_herb    0.102 0.087 0.008 0.012 0.039 0.079 0.139 0.277
+p.MC3_2019.Tillering.Detritivore 0.257 0.107 0.072 0.092 0.181 0.251 0.322 0.439
+p.MC3_2019.Tillering.Rice_herb   0.302 0.105 0.114 0.136 0.229 0.297 0.373 0.477
+p.MC3_2019.Tillering.Tour_herb   0.441 0.122 0.204 0.244 0.360 0.437 0.524 0.644
+p.MC3_2019.Flowering.Detritivore 0.040 0.029 0.006 0.008 0.019 0.032 0.052 0.099
+p.MC3_2019.Flowering.Rice_herb   0.783 0.112 0.516 0.571 0.717 0.803 0.869 0.931
+p.MC3_2019.Flowering.Tour_herb   0.177 0.109 0.026 0.039 0.095 0.158 0.239 0.385
+p.MC3_2019.Ripening.Detritivore  0.043 0.032 0.004 0.007 0.021 0.035 0.058 0.105
+p.MC3_2019.Ripening.Rice_herb    0.863 0.069 0.702 0.737 0.823 0.875 0.913 0.954
+p.MC3_2019.Ripening.Tour_herb    0.094 0.061 0.015 0.021 0.049 0.081 0.126 0.207
+p.MO_2017.Tillering.Detritivore  0.458 0.183 0.099 0.141 0.329 0.464 0.589 0.759
+p.MO_2017.Tillering.Rice_herb    0.216 0.125 0.041 0.053 0.118 0.193 0.292 0.452
+p.MO_2017.Tillering.Tour_herb    0.326 0.213 0.031 0.047 0.156 0.282 0.468 0.739
+p.MO_2017.Flowering.Detritivore  0.094 0.062 0.013 0.018 0.048 0.081 0.127 0.216
+p.MO_2017.Flowering.Rice_herb    0.706 0.180 0.296 0.351 0.597 0.746 0.844 0.931
+p.MO_2017.Flowering.Tour_herb    0.200 0.184 0.008 0.012 0.051 0.131 0.314 0.582
+p.MO_2017.Ripening.Detritivore   0.105 0.069 0.012 0.018 0.052 0.091 0.145 0.237
+p.MO_2017.Ripening.Rice_herb     0.786 0.120 0.509 0.558 0.717 0.805 0.875 0.946
+p.MO_2017.Ripening.Tour_herb     0.109 0.109 0.005 0.008 0.029 0.072 0.151 0.346
+p.MO1_2018.Tillering.Detritivore 0.653 0.251 0.104 0.162 0.471 0.721 0.865 0.946
+p.MO1_2018.Tillering.Rice_herb   0.133 0.136 0.012 0.017 0.043 0.082 0.168 0.444
+p.MO1_2018.Tillering.Tour_herb   0.214 0.211 0.009 0.014 0.056 0.140 0.304 0.688
+p.MO1_2018.Flowering.Detritivore 0.267 0.195 0.011 0.017 0.083 0.252 0.421 0.607
+p.MO1_2018.Flowering.Rice_herb   0.569 0.211 0.200 0.241 0.411 0.549 0.736 0.926
+p.MO1_2018.Flowering.Tour_herb   0.163 0.171 0.007 0.011 0.044 0.101 0.218 0.558
+p.MO1_2018.Ripening.Detritivore  0.272 0.198 0.015 0.023 0.101 0.241 0.405 0.656
+p.MO1_2018.Ripening.Rice_herb    0.637 0.197 0.211 0.284 0.503 0.649 0.787 0.938
+p.MO1_2018.Ripening.Tour_herb    0.091 0.105 0.004 0.006 0.023 0.055 0.116 0.313
+p.MO1_2019.Tillering.Detritivore 0.763 0.143 0.416 0.498 0.682 0.792 0.871 0.939
+p.MO1_2019.Tillering.Rice_herb   0.097 0.068 0.022 0.028 0.054 0.079 0.119 0.225
+p.MO1_2019.Tillering.Tour_herb   0.140 0.111 0.010 0.014 0.052 0.115 0.199 0.353
+p.MO1_2019.Flowering.Detritivore 0.294 0.132 0.059 0.086 0.199 0.289 0.382 0.522
+p.MO1_2019.Flowering.Rice_herb   0.587 0.132 0.323 0.367 0.501 0.588 0.674 0.807
+p.MO1_2019.Flowering.Tour_herb   0.119 0.093 0.010 0.015 0.049 0.095 0.167 0.298
+p.MO1_2019.Ripening.Detritivore  0.311 0.134 0.028 0.054 0.226 0.327 0.404 0.511
+p.MO1_2019.Ripening.Rice_herb    0.627 0.131 0.392 0.432 0.539 0.613 0.707 0.872
+p.MO1_2019.Ripening.Tour_herb    0.061 0.052 0.005 0.008 0.025 0.048 0.083 0.159
+p.MO2_2018.Tillering.Detritivore 0.330 0.216 0.047 0.072 0.178 0.283 0.413 0.858
+p.MO2_2018.Tillering.Rice_herb   0.126 0.088 0.018 0.025 0.061 0.106 0.168 0.298
+p.MO2_2018.Tillering.Tour_herb   0.544 0.210 0.020 0.059 0.450 0.570 0.690 0.830
+p.MO2_2018.Flowering.Detritivore 0.106 0.113 0.007 0.010 0.032 0.066 0.135 0.352
+p.MO2_2018.Flowering.Rice_herb   0.540 0.194 0.149 0.191 0.401 0.557 0.692 0.829
+p.MO2_2018.Flowering.Tour_herb   0.354 0.206 0.032 0.059 0.194 0.327 0.495 0.731
+p.MO2_2019.Tillering.Detritivore 0.543 0.385 0.022 0.031 0.126 0.582 0.922 0.961
+p.MO2_2019.Tillering.Rice_herb   0.054 0.035 0.008 0.011 0.029 0.048 0.072 0.121
+p.MO2_2019.Tillering.Tour_herb   0.403 0.390 0.003 0.005 0.019 0.341 0.817 0.936
+p.MO2_2019.Flowering.Detritivore 0.255 0.216 0.004 0.007 0.037 0.254 0.430 0.608
+p.MO2_2019.Flowering.Rice_herb   0.410 0.208 0.056 0.080 0.218 0.449 0.575 0.721
+p.MO2_2019.Flowering.Tour_herb   0.335 0.349 0.005 0.007 0.023 0.101 0.709 0.888
+p.MO3_2018.Tillering.Detritivore 0.442 0.204 0.097 0.136 0.293 0.423 0.570 0.833
+p.MO3_2018.Tillering.Rice_herb   0.137 0.101 0.017 0.023 0.061 0.111 0.185 0.335
+p.MO3_2018.Tillering.Tour_herb   0.421 0.190 0.037 0.076 0.296 0.425 0.553 0.725
+p.MO3_2018.Flowering.Detritivore 0.144 0.127 0.010 0.017 0.050 0.104 0.198 0.413
+p.MO3_2018.Flowering.Rice_herb   0.568 0.194 0.174 0.240 0.424 0.571 0.722 0.865
+p.MO3_2018.Flowering.Tour_herb   0.288 0.180 0.028 0.049 0.145 0.259 0.409 0.618
+p.MO3_2019.Tillering.Detritivore 0.175 0.159 0.006 0.011 0.040 0.117 0.284 0.489
+p.MO3_2019.Tillering.Rice_herb   0.008 0.007 0.001 0.001 0.004 0.006 0.011 0.022
+p.MO3_2019.Tillering.Tour_herb   0.817 0.161 0.459 0.502 0.705 0.875 0.954 0.986
+p.MO3_2019.Flowering.Detritivore 0.064 0.054 0.003 0.005 0.022 0.049 0.096 0.175
+p.MO3_2019.Flowering.Rice_herb   0.068 0.044 0.011 0.015 0.035 0.058 0.091 0.154
+p.MO3_2019.Flowering.Tour_herb   0.868 0.076 0.692 0.726 0.819 0.879 0.928 0.970
+p.MO3_2019.Ripening.Detritivore  0.099 0.068 0.009 0.014 0.044 0.085 0.142 0.235
+p.MO3_2019.Ripening.Rice_herb    0.116 0.055 0.030 0.039 0.075 0.109 0.150 0.219
+p.MO3_2019.Ripening.Tour_herb    0.785 0.081 0.611 0.645 0.731 0.790 0.846 0.910
+p.OC_2017.Tillering.Detritivore  0.768 0.113 0.508 0.553 0.702 0.783 0.856 0.922
+p.OC_2017.Tillering.Rice_herb    0.128 0.067 0.039 0.046 0.079 0.114 0.163 0.254
+p.OC_2017.Tillering.Tour_herb    0.104 0.084 0.008 0.012 0.040 0.082 0.147 0.273
+p.OC_2017.Flowering.Detritivore  0.241 0.100 0.060 0.081 0.170 0.237 0.309 0.408
+p.OC_2017.Flowering.Rice_herb    0.680 0.105 0.465 0.503 0.613 0.682 0.752 0.848
+p.OC_2017.Flowering.Tour_herb    0.079 0.072 0.007 0.009 0.029 0.058 0.105 0.223
+p.OC_2017.Ripening.Detritivore   0.251 0.113 0.040 0.058 0.172 0.254 0.330 0.431
+p.OC_2017.Ripening.Rice_herb     0.710 0.113 0.497 0.526 0.631 0.707 0.788 0.902
+p.OC_2017.Ripening.Tour_herb     0.039 0.040 0.003 0.005 0.015 0.028 0.050 0.108
+p.OO_2017.Tillering.Detritivore  0.771 0.108 0.538 0.574 0.704 0.784 0.854 0.918
+p.OO_2017.Tillering.Rice_herb    0.117 0.059 0.034 0.042 0.074 0.105 0.148 0.231
+p.OO_2017.Tillering.Tour_herb    0.113 0.089 0.008 0.013 0.043 0.090 0.161 0.284
+p.OO_2017.Flowering.Detritivore  0.255 0.112 0.071 0.087 0.170 0.243 0.329 0.455
+p.OO_2017.Flowering.Rice_herb    0.654 0.122 0.409 0.446 0.571 0.657 0.741 0.848
+p.OO_2017.Flowering.Tour_herb    0.092 0.083 0.007 0.010 0.031 0.066 0.128 0.256
+p.OO_2017.Ripening.Detritivore   0.259 0.106 0.058 0.087 0.186 0.263 0.330 0.431
+p.OO_2017.Ripening.Rice_herb     0.696 0.105 0.491 0.530 0.624 0.695 0.768 0.868
+p.OO_2017.Ripening.Tour_herb     0.045 0.042 0.004 0.006 0.018 0.033 0.061 0.121
+p.SC1_2018.Tillering.Detritivore 0.395 0.177 0.101 0.134 0.263 0.377 0.511 0.727
+p.SC1_2018.Tillering.Rice_herb   0.347 0.146 0.091 0.116 0.238 0.341 0.448 0.602
+p.SC1_2018.Tillering.Tour_herb   0.258 0.145 0.031 0.050 0.148 0.243 0.350 0.518
+p.SC1_2018.Flowering.Detritivore 0.066 0.061 0.006 0.009 0.025 0.046 0.087 0.199
+p.SC1_2018.Flowering.Rice_herb   0.834 0.103 0.584 0.631 0.777 0.856 0.913 0.958
+p.SC1_2018.Flowering.Tour_herb   0.100 0.085 0.008 0.012 0.038 0.078 0.138 0.271
+p.SC1_2018.Ripening.Detritivore  0.068 0.061 0.005 0.008 0.025 0.048 0.091 0.198
+p.SC1_2018.Ripening.Rice_herb    0.882 0.077 0.688 0.730 0.840 0.901 0.939 0.971
+p.SC1_2018.Ripening.Tour_herb    0.051 0.046 0.005 0.007 0.019 0.037 0.068 0.139
+p.SC1_2019.Tillering.Detritivore 0.613 0.110 0.398 0.431 0.539 0.612 0.687 0.794
+p.SC1_2019.Tillering.Rice_herb   0.225 0.084 0.079 0.096 0.163 0.220 0.280 0.373
+p.SC1_2019.Tillering.Tour_herb   0.163 0.095 0.017 0.028 0.090 0.153 0.219 0.336
+p.SC1_2019.Flowering.Detritivore 0.126 0.068 0.032 0.040 0.076 0.113 0.163 0.251
+p.SC1_2019.Flowering.Rice_herb   0.788 0.096 0.567 0.616 0.735 0.804 0.857 0.915
+p.SC1_2019.Flowering.Tour_herb   0.086 0.073 0.007 0.012 0.035 0.067 0.116 0.222
+p.SC1_2019.Ripening.Detritivore  0.131 0.077 0.021 0.032 0.075 0.117 0.171 0.277
+p.SC1_2019.Ripening.Rice_herb    0.825 0.090 0.613 0.657 0.777 0.842 0.889 0.938
+p.SC1_2019.Ripening.Tour_herb    0.045 0.043 0.004 0.006 0.017 0.032 0.058 0.125
+p.SO1_2018.Tillering.Detritivore 0.818 0.076 0.652 0.686 0.774 0.825 0.872 0.924
+p.SO1_2018.Tillering.Rice_herb   0.128 0.059 0.041 0.050 0.085 0.119 0.161 0.238
+p.SO1_2018.Tillering.Tour_herb   0.054 0.047 0.006 0.008 0.023 0.044 0.073 0.137
+p.SO1_2018.Flowering.Detritivore 0.257 0.107 0.082 0.101 0.181 0.247 0.319 0.452
+p.SO1_2018.Flowering.Rice_herb   0.699 0.111 0.462 0.502 0.632 0.710 0.779 0.859
+p.SO1_2018.Flowering.Tour_herb   0.045 0.047 0.003 0.005 0.016 0.032 0.058 0.126
+p.SO1_2018.Ripening.Detritivore  0.258 0.114 0.053 0.079 0.179 0.252 0.329 0.461
+p.SO1_2018.Ripening.Rice_herb    0.720 0.114 0.481 0.516 0.649 0.726 0.800 0.898
+p.SO1_2018.Ripening.Tour_herb    0.022 0.024 0.002 0.003 0.008 0.015 0.028 0.061
+p.SO1_2019.Tillering.Detritivore 0.679 0.139 0.377 0.435 0.592 0.690 0.784 0.882
+p.SO1_2019.Tillering.Rice_herb   0.186 0.091 0.057 0.069 0.118 0.169 0.238 0.359
+p.SO1_2019.Tillering.Tour_herb   0.135 0.108 0.011 0.016 0.054 0.108 0.190 0.343
+p.SO1_2019.Flowering.Detritivore 0.169 0.091 0.036 0.046 0.101 0.155 0.222 0.336
+p.SO1_2019.Flowering.Rice_herb   0.752 0.107 0.521 0.561 0.689 0.761 0.832 0.906
+p.SO1_2019.Flowering.Tour_herb   0.079 0.073 0.006 0.009 0.029 0.058 0.106 0.215
+p.SO1_2019.Ripening.Detritivore  0.174 0.098 0.023 0.038 0.096 0.162 0.236 0.357
+p.SO1_2019.Ripening.Rice_herb    0.785 0.104 0.561 0.598 0.721 0.794 0.866 0.932
+p.SO1_2019.Ripening.Tour_herb    0.041 0.044 0.003 0.004 0.014 0.028 0.052 0.118
+                                 97.5%
+Epsilon.1                        0.558
+Epsilon.2                        0.648
+p.GC_2017.Tillering.Detritivore  0.752
+p.GC_2017.Tillering.Rice_herb    0.369
+p.GC_2017.Tillering.Tour_herb    0.456
+p.GC_2017.Flowering.Detritivore  0.194
+p.GC_2017.Flowering.Rice_herb    0.909
+p.GC_2017.Flowering.Tour_herb    0.274
+p.GC_2017.Ripening.Detritivore   0.200
+p.GC_2017.Ripening.Rice_herb     0.934
+p.GC_2017.Ripening.Tour_herb     0.134
+p.GO_2017.Tillering.Detritivore  0.609
+p.GO_2017.Tillering.Rice_herb    0.710
+p.GO_2017.Tillering.Tour_herb    0.600
+p.GO_2017.Flowering.Detritivore  0.108
+p.GO_2017.Flowering.Rice_herb    0.974
+p.GO_2017.Flowering.Tour_herb    0.246
+p.GO_2017.Ripening.Detritivore   0.113
+p.GO_2017.Ripening.Rice_herb     0.981
+p.GO_2017.Ripening.Tour_herb     0.138
+p.LC1_2018.Tillering.Detritivore 0.772
+p.LC1_2018.Tillering.Rice_herb   0.654
+p.LC1_2018.Tillering.Tour_herb   0.663
+p.LC1_2018.Flowering.Detritivore 0.199
+p.LC1_2018.Flowering.Rice_herb   0.969
+p.LC1_2018.Flowering.Tour_herb   0.424
+p.LC1_2018.Ripening.Detritivore  0.187
+p.LC1_2018.Ripening.Rice_herb    0.977
+p.LC1_2018.Ripening.Tour_herb    0.178
+p.LC1_2019.Tillering.Detritivore 0.403
+p.LC1_2019.Tillering.Rice_herb   0.641
+p.LC1_2019.Tillering.Tour_herb   0.523
+p.LC1_2019.Flowering.Detritivore 0.066
+p.LC1_2019.Flowering.Rice_herb   0.968
+p.LC1_2019.Flowering.Tour_herb   0.228
+p.LC1_2019.Ripening.Detritivore  0.069
+p.LC1_2019.Ripening.Rice_herb    0.980
+p.LC1_2019.Ripening.Tour_herb    0.132
+p.LC2_2018.Tillering.Detritivore 0.835
+p.LC2_2018.Tillering.Rice_herb   0.622
+p.LC2_2018.Tillering.Tour_herb   0.630
+p.LC2_2018.Ripening.Detritivore  0.295
+p.LC2_2018.Ripening.Rice_herb    0.973
+p.LC2_2018.Ripening.Tour_herb    0.252
+p.LC2_2019.Tillering.Detritivore 0.828
+p.LC2_2019.Tillering.Rice_herb   0.501
+p.LC2_2019.Tillering.Tour_herb   0.389
+p.LC2_2019.Flowering.Detritivore 0.289
+p.LC2_2019.Flowering.Rice_herb   0.955
+p.LC2_2019.Flowering.Tour_herb   0.255
+p.LC3_2018.Tillering.Detritivore 0.531
+p.LC3_2018.Tillering.Rice_herb   0.781
+p.LC3_2018.Tillering.Tour_herb   0.358
+p.LC3_2018.Flowering.Detritivore 0.075
+p.LC3_2018.Flowering.Rice_herb   0.985
+p.LC3_2018.Flowering.Tour_herb   0.118
+p.LC3_2018.Ripening.Detritivore  0.077
+p.LC3_2018.Ripening.Rice_herb    0.991
+p.LC3_2018.Ripening.Tour_herb    0.057
+p.LC3_2019.Tillering.Detritivore 0.820
+p.LC3_2019.Tillering.Rice_herb   0.424
+p.LC3_2019.Tillering.Tour_herb   0.258
+p.LC3_2019.Flowering.Detritivore 0.246
+p.LC3_2019.Flowering.Rice_herb   0.941
+p.LC3_2019.Flowering.Tour_herb   0.174
+p.LC3_2019.Ripening.Detritivore  0.244
+p.LC3_2019.Ripening.Rice_herb    0.959
+p.LC3_2019.Ripening.Tour_herb    0.082
+p.LO1_2018.Tillering.Detritivore 0.634
+p.LO1_2018.Tillering.Rice_herb   0.543
+p.LO1_2018.Tillering.Tour_herb   0.641
+p.LO1_2018.Flowering.Detritivore 0.158
+p.LO1_2018.Flowering.Rice_herb   0.953
+p.LO1_2018.Flowering.Tour_herb   0.450
+p.LO1_2018.Ripening.Detritivore  0.161
+p.LO1_2018.Ripening.Rice_herb    0.966
+p.LO1_2018.Ripening.Tour_herb    0.323
+p.LO1_2019.Tillering.Detritivore 0.568
+p.LO1_2019.Tillering.Rice_herb   0.810
+p.LO1_2019.Tillering.Tour_herb   0.448
+p.LO1_2019.Flowering.Detritivore 0.092
+p.LO1_2019.Flowering.Rice_herb   0.987
+p.LO1_2019.Flowering.Tour_herb   0.165
+p.LO1_2019.Ripening.Detritivore  0.095
+p.LO1_2019.Ripening.Rice_herb    0.992
+p.LO1_2019.Ripening.Tour_herb    0.085
+p.LO2_2018.Tillering.Detritivore 0.825
+p.LO2_2018.Tillering.Rice_herb   0.507
+p.LO2_2018.Tillering.Tour_herb   0.527
+p.LO2_2018.Flowering.Detritivore 0.260
+p.LO2_2018.Flowering.Rice_herb   0.951
+p.LO2_2018.Flowering.Tour_herb   0.314
+p.LO2_2018.Ripening.Detritivore  0.253
+p.LO2_2018.Ripening.Rice_herb    0.963
+p.LO2_2018.Ripening.Tour_herb    0.158
+p.LO2_2019.Tillering.Detritivore 0.868
+p.LO2_2019.Tillering.Rice_herb   0.425
+p.LO2_2019.Tillering.Tour_herb   0.347
+p.LO2_2019.Flowering.Detritivore 0.378
+p.LO2_2019.Flowering.Rice_herb   0.940
+p.LO2_2019.Flowering.Tour_herb   0.289
+p.LO3_2018.Tillering.Detritivore 0.872
+p.LO3_2018.Tillering.Rice_herb   0.500
+p.LO3_2018.Tillering.Tour_herb   0.533
+p.LO3_2018.Ripening.Detritivore  0.302
+p.LO3_2018.Ripening.Rice_herb    0.967
+p.LO3_2018.Ripening.Tour_herb    0.150
+p.LO3_2019.Tillering.Detritivore 0.802
+p.LO3_2019.Tillering.Rice_herb   0.948
+p.LO3_2019.Tillering.Tour_herb   0.182
+p.LO3_2019.Flowering.Detritivore 0.173
+p.LO3_2019.Flowering.Rice_herb   0.996
+p.LO3_2019.Flowering.Tour_herb   0.075
+p.LO3_2019.Ripening.Detritivore  0.160
+p.LO3_2019.Ripening.Rice_herb    0.997
+p.LO3_2019.Ripening.Tour_herb    0.036
+p.MC_2017.Tillering.Detritivore  0.903
+p.MC_2017.Tillering.Rice_herb    0.290
+p.MC_2017.Tillering.Tour_herb    0.596
+p.MC_2017.Flowering.Detritivore  0.383
+p.MC_2017.Flowering.Rice_herb    0.843
+p.MC_2017.Flowering.Tour_herb    0.484
+p.MC_2017.Ripening.Detritivore   0.383
+p.MC_2017.Ripening.Rice_herb     0.895
+p.MC_2017.Ripening.Tour_herb     0.299
+p.MC1_2018.Tillering.Detritivore 0.705
+p.MC1_2018.Tillering.Rice_herb   0.890
+p.MC1_2018.Tillering.Tour_herb   0.372
+p.MC1_2018.Flowering.Detritivore 0.129
+p.MC1_2018.Flowering.Rice_herb   0.992
+p.MC1_2018.Flowering.Tour_herb   0.115
+p.MC1_2018.Ripening.Detritivore  0.135
+p.MC1_2018.Ripening.Rice_herb    0.995
+p.MC1_2018.Ripening.Tour_herb    0.059
+p.MC1_2019.Tillering.Detritivore 0.699
+p.MC1_2019.Tillering.Rice_herb   0.764
+p.MC1_2019.Tillering.Tour_herb   0.522
+p.MC1_2019.Flowering.Detritivore 0.139
+p.MC1_2019.Flowering.Rice_herb   0.979
+p.MC1_2019.Flowering.Tour_herb   0.195
+p.MC1_2019.Ripening.Detritivore  0.143
+p.MC1_2019.Ripening.Rice_herb    0.987
+p.MC1_2019.Ripening.Tour_herb    0.120
+p.MC2_2018.Tillering.Detritivore 0.623
+p.MC2_2018.Tillering.Rice_herb   0.901
+p.MC2_2018.Tillering.Tour_herb   0.519
+p.MC2_2018.Flowering.Detritivore 0.095
+p.MC2_2018.Flowering.Rice_herb   0.993
+p.MC2_2018.Flowering.Tour_herb   0.198
+p.MC2_2018.Ripening.Detritivore  0.090
+p.MC2_2018.Ripening.Rice_herb    0.995
+p.MC2_2018.Ripening.Tour_herb    0.098
+p.MC2_2019.Tillering.Detritivore 0.732
+p.MC2_2019.Tillering.Rice_herb   0.650
+p.MC2_2019.Tillering.Tour_herb   0.392
+p.MC2_2019.Flowering.Detritivore 0.138
+p.MC2_2019.Flowering.Rice_herb   0.968
+p.MC2_2019.Flowering.Tour_herb   0.125
+p.MC3_2018.Tillering.Detritivore 0.827
+p.MC3_2018.Tillering.Rice_herb   0.491
+p.MC3_2018.Tillering.Tour_herb   0.667
+p.MC3_2018.Flowering.Detritivore 0.342
+p.MC3_2018.Flowering.Rice_herb   0.938
+p.MC3_2018.Flowering.Tour_herb   0.509
+p.MC3_2018.Ripening.Detritivore  0.369
+p.MC3_2018.Ripening.Rice_herb    0.954
+p.MC3_2018.Ripening.Tour_herb    0.332
+p.MC3_2019.Tillering.Detritivore 0.492
+p.MC3_2019.Tillering.Rice_herb   0.515
+p.MC3_2019.Tillering.Tour_herb   0.688
+p.MC3_2019.Flowering.Detritivore 0.116
+p.MC3_2019.Flowering.Rice_herb   0.945
+p.MC3_2019.Flowering.Tour_herb   0.448
+p.MC3_2019.Ripening.Detritivore  0.127
+p.MC3_2019.Ripening.Rice_herb    0.964
+p.MC3_2019.Ripening.Tour_herb    0.248
+p.MO_2017.Tillering.Detritivore  0.811
+p.MO_2017.Tillering.Rice_herb    0.500
+p.MO_2017.Tillering.Tour_herb    0.807
+p.MO_2017.Flowering.Detritivore  0.248
+p.MO_2017.Flowering.Rice_herb    0.948
+p.MO_2017.Flowering.Tour_herb    0.630
+p.MO_2017.Ripening.Detritivore   0.268
+p.MO_2017.Ripening.Rice_herb     0.958
+p.MO_2017.Ripening.Tour_herb     0.409
+p.MO1_2018.Tillering.Detritivore 0.960
+p.MO1_2018.Tillering.Rice_herb   0.520
+p.MO1_2018.Tillering.Tour_herb   0.788
+p.MO1_2018.Flowering.Detritivore 0.665
+p.MO1_2018.Flowering.Rice_herb   0.953
+p.MO1_2018.Flowering.Tour_herb   0.650
+p.MO1_2018.Ripening.Detritivore  0.717
+p.MO1_2018.Ripening.Rice_herb    0.959
+p.MO1_2018.Ripening.Tour_herb    0.401
+p.MO1_2019.Tillering.Detritivore 0.954
+p.MO1_2019.Tillering.Rice_herb   0.287
+p.MO1_2019.Tillering.Tour_herb   0.402
+p.MO1_2019.Flowering.Detritivore 0.574
+p.MO1_2019.Flowering.Rice_herb   0.844
+p.MO1_2019.Flowering.Tour_herb   0.347
+p.MO1_2019.Ripening.Detritivore  0.551
+p.MO1_2019.Ripening.Rice_herb    0.915
+p.MO1_2019.Ripening.Tour_herb    0.192
+p.MO2_2018.Tillering.Detritivore 0.914
+p.MO2_2018.Tillering.Rice_herb   0.333
+p.MO2_2018.Tillering.Tour_herb   0.867
+p.MO2_2018.Flowering.Detritivore 0.443
+p.MO2_2018.Flowering.Rice_herb   0.870
+p.MO2_2018.Flowering.Tour_herb   0.795
+p.MO2_2019.Tillering.Detritivore 0.969
+p.MO2_2019.Tillering.Rice_herb   0.142
+p.MO2_2019.Tillering.Tour_herb   0.954
+p.MO2_2019.Flowering.Detritivore 0.668
+p.MO2_2019.Flowering.Rice_herb   0.764
+p.MO2_2019.Flowering.Tour_herb   0.917
+p.MO3_2018.Tillering.Detritivore 0.895
+p.MO3_2018.Tillering.Rice_herb   0.395
+p.MO3_2018.Tillering.Tour_herb   0.772
+p.MO3_2018.Flowering.Detritivore 0.482
+p.MO3_2018.Flowering.Rice_herb   0.902
+p.MO3_2018.Flowering.Tour_herb   0.704
+p.MO3_2019.Tillering.Detritivore 0.530
+p.MO3_2019.Tillering.Rice_herb   0.028
+p.MO3_2019.Tillering.Tour_herb   0.991
+p.MO3_2019.Flowering.Detritivore 0.202
+p.MO3_2019.Flowering.Rice_herb   0.173
+p.MO3_2019.Flowering.Tour_herb   0.977
+p.MO3_2019.Ripening.Detritivore  0.264
+p.MO3_2019.Ripening.Rice_herb    0.244
+p.MO3_2019.Ripening.Tour_herb    0.926
+p.OC_2017.Tillering.Detritivore  0.936
+p.OC_2017.Tillering.Rice_herb    0.291
+p.OC_2017.Tillering.Tour_herb    0.312
+p.OC_2017.Flowering.Detritivore  0.441
+p.OC_2017.Flowering.Rice_herb    0.875
+p.OC_2017.Flowering.Tour_herb    0.283
+p.OC_2017.Ripening.Detritivore   0.469
+p.OC_2017.Ripening.Rice_herb     0.928
+p.OC_2017.Ripening.Tour_herb     0.137
+p.OO_2017.Tillering.Detritivore  0.934
+p.OO_2017.Tillering.Rice_herb    0.265
+p.OO_2017.Tillering.Tour_herb    0.326
+p.OO_2017.Flowering.Detritivore  0.494
+p.OO_2017.Flowering.Rice_herb    0.872
+p.OO_2017.Flowering.Tour_herb    0.310
+p.OO_2017.Ripening.Detritivore   0.467
+p.OO_2017.Ripening.Rice_herb     0.896
+p.OO_2017.Ripening.Tour_herb     0.155
+p.SC1_2018.Tillering.Detritivore 0.784
+p.SC1_2018.Tillering.Rice_herb   0.646
+p.SC1_2018.Tillering.Tour_herb   0.589
+p.SC1_2018.Flowering.Detritivore 0.238
+p.SC1_2018.Flowering.Rice_herb   0.968
+p.SC1_2018.Flowering.Tour_herb   0.319
+p.SC1_2018.Ripening.Detritivore  0.237
+p.SC1_2018.Ripening.Rice_herb    0.978
+p.SC1_2018.Ripening.Tour_herb    0.174
+p.SC1_2019.Tillering.Detritivore 0.830
+p.SC1_2019.Tillering.Rice_herb   0.406
+p.SC1_2019.Tillering.Tour_herb   0.375
+p.SC1_2019.Flowering.Detritivore 0.284
+p.SC1_2019.Flowering.Rice_herb   0.926
+p.SC1_2019.Flowering.Tour_herb   0.269
+p.SC1_2019.Ripening.Detritivore  0.317
+p.SC1_2019.Ripening.Rice_herb    0.952
+p.SC1_2019.Ripening.Tour_herb    0.158
+p.SO1_2018.Tillering.Detritivore 0.937
+p.SO1_2018.Tillering.Rice_herb   0.273
+p.SO1_2018.Tillering.Tour_herb   0.160
+p.SO1_2018.Flowering.Detritivore 0.496
+p.SO1_2018.Flowering.Rice_herb   0.886
+p.SO1_2018.Flowering.Tour_herb   0.159
+p.SO1_2018.Ripening.Detritivore  0.500
+p.SO1_2018.Ripening.Rice_herb    0.926
+p.SO1_2018.Ripening.Tour_herb    0.079
+p.SO1_2019.Tillering.Detritivore 0.905
+p.SO1_2019.Tillering.Rice_herb   0.401
+p.SO1_2019.Tillering.Tour_herb   0.408
+p.SO1_2019.Flowering.Detritivore 0.383
+p.SO1_2019.Flowering.Rice_herb   0.924
+p.SO1_2019.Flowering.Tour_herb   0.270
+p.SO1_2019.Ripening.Detritivore  0.399
+p.SO1_2019.Ripening.Rice_herb    0.948
+p.SO1_2019.Ripening.Tour_herb    0.148

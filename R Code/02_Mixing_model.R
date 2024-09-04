@@ -228,7 +228,7 @@ jags_ladybeetle <- run_model(run = "short",
                              process_err)
 
 ### Evaluate JAGS outputs
-setwd("./Output/JAGS")
+# setwd("./Output/JAGS")
 options(max.print = 1000000)
 
 output_JAGS_predator <- 

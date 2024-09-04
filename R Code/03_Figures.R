@@ -1,9 +1,9 @@
 ## -----------------------------------------------------------------------------
-## Title: Visualization of Predators' Diet Compositions
+## Title: Create the manuscript figures
 ##
 ## Author: Gen-Chang Hsu
 ##
-## Date: 2023-04-28
+## Date: 2024-09-03
 ##
 ## Description: 
 ## 1. Create line charts of dietary proportions both predators, spiders, and ladybeetles.
@@ -671,7 +671,4 @@ ggplot() +
   annotate(x = -25, y = 8.15, geom = "text", label = "Predator", size = 4)
 
 ggsave("Output/Figures/Biplot.tiff", width = 6.5, height = 5, dpi = 600)
-
-
-
 

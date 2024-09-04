@@ -161,18 +161,10 @@ TDF <- source %>%
   summarise(Meand13C = mean(TDF_C_fun(d13C)), SDd13C = sd(TDF_C_fun(d13C)),
             Meand15N = mean(TDF_N_fun(d15N)), SDd15N = sd(TDF_N_fun(d15N)))
 
-TDF <- TDF %>%
-  rows_update(., tibble(Source = "Predator", Meand13C = 0.5, SDd13C = 0.13, Meand15N = 1.4, SDd15N = 0.2))
+# TDF <- TDF %>%
+#   rows_update(., tibble(Source = "Predator", Meand13C = 0.5, SDd13C = 0.13, Meand15N = 1.4, SDd15N = 0.2))
 
 write.csv(TDF, "Output/Temp_IGP/TDF.csv", row.names = F)
-
-TDF_out <- TDF %>% 
-  mutate(across(where(is.numeric), ~ round(.x, 1))) %>% 
-  mutate(Mean_SD_d13C = str_c(Meand13C, SDd13C, sep = " ± "),
-         Mean_SD_d15N = str_c(Meand15N, SDd15N, sep = " ± ")) %>% 
-  select(Source, Mean_SD_d13C, Mean_SD_d15N)
-
-write.csv(TDF_out, "Output/Temp_IGP/TDF_Out.csv", row.names = F)
 
 discr_mix_siar_predator <- load_discr_data(filename = "Output/Temp_IGP/TDF.csv", mix_siar_predator)
 discr_mix_siar_spider <- load_discr_data(filename = "Output/Temp_IGP/TDF.csv", mix_siar_spider)
@@ -444,6 +436,7 @@ model_out_clean %>%
   coord_cartesian(ylim = c(0, 1), clip = "off") +
   xlab("Crop stage") +
   ylab("Proportion (mean ± SE)") +
+  labs(title = "With predators as a prey source") + 
   scale_color_manual(values = c("#00BA38", "#619CFF", "#993300", "black"), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore", "Predator"), name = "") +
   scale_shape_manual(values = c(16, 15, 17, 18), labels = c("Rice herbivore", "Tourist herbivore", "Detritivore", "Predator"), name = "") +
   scale_y_continuous(expand = c(0, 0)) +
@@ -451,13 +444,13 @@ model_out_clean %>%
   theme(panel.spacing.x = unit(0, "lines"),
         panel.spacing.y = unit(2, "lines"),
         legend.direction = "horizontal",
-        legend.key.width = unit(0.6, "in"),
+        legend.key.width = unit(0.3, "in"),
         legend.text = element_text(margin = margin(l = 4)),
         legend.position = "bottom",
-        legend.key.spacing.x = unit(0.2, "in"),
+        legend.key.spacing.x = unit(0.15, "in"),
         strip.background.y = element_rect(fill = "grey80"))
 
-ggsave("./Output/Temp_IGP/Diet_proportion_both.tiff", width = 6, height = 4, dpi = 600)
+ggsave("./Output/Temp_IGP/Diet_proportion_IGP.tiff", width = 6, height = 4.2, dpi = 600)
 
 
 
