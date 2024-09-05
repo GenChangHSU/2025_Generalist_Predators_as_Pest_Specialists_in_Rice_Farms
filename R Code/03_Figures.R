@@ -348,7 +348,7 @@ Abd_2017_clean <- Abd_2017 %>%
                                 Predator = c("Ara", "Coc", "Tet"),
                                 other_level = "Others")) %>%
   mutate(Trophic = factor(Trophic, levels = c("Predator", "Rice_herb", "Tourist_herb", "Detritivore", "Others"), ordered = T)) %>%
-  select(Year, Farm_type, Crop_stage, Trophic, Count)
+  select(Year, Farm, Farm_type, Crop_stage, Trophic, Count)
 
 Abd_2018_clean <- Abd_2018 %>%
   select(1:4) %>%
@@ -365,7 +365,7 @@ Abd_2018_clean <- Abd_2018 %>%
                                 Predator = c("Ara", "Coc", "Tet"),
                                 other_level = "Others")) %>%
   mutate(Trophic = factor(Trophic, levels = c("Predator", "Rice_herb", "Tourist_herb", "Detritivore", "Others"), ordered = T)) %>%
-  select(Year, Farm_type, Crop_stage, Trophic, Count = Abundance)
+  select(Year, Farm, Farm_type, Crop_stage, Trophic, Count = Abundance)
 
 Abd_2019_clean <- Abd_2019 %>%
   select(1:4) %>%
@@ -383,10 +383,31 @@ Abd_2019_clean <- Abd_2019 %>%
                                 Predator = c("Ara", "Coc", "Tet"),
                                 other_level = "Others")) %>%
   mutate(Trophic = factor(Trophic, levels = c("Predator", "Rice_herb", "Tourist_herb", "Detritivore", "Others"), ordered = T)) %>%
-  select(Year, Farm_type, Crop_stage, Trophic, Count = Abundance)
+  select(Year, Farm, Farm_type, Crop_stage, Trophic, Count = Abundance)
 
 Abd_all <- bind_rows(Abd_2017_clean, Abd_2018_clean, Abd_2019_clean) %>%
   na.omit()
+
+### Abundance of prey and predators at the three crop stages
+Abd_all %>% 
+  filter(Trophic != "Others") %>%
+  filter(Crop_stage != "Seedling") %>% 
+  mutate(Prey_or_predator = if_else(Trophic == "Predator", "Predator", "Prey")) %>% 
+  group_by(Year, Farm_type, Farm, Crop_stage, Prey_or_predator) %>% 
+  summarise(Abundance = sum(Count, na.rm = T)) %>% 
+  ungroup() %>% 
+  group_by(Farm_type, Crop_stage, Prey_or_predator) %>% 
+  summarise(Mean_abd = mean(Abundance),
+            N_farms = n(),
+            SD = sd(Abundance),
+            SE = SD/sqrt(N_farms)) %>% 
+  mutate(Mean_abd = round(Mean_abd, 1),
+         SE = round(SE, 1),
+         Mean_SE = str_c(Mean_abd, SE, sep = " ± ")) %>% 
+  select(Farm_type, Crop_stage, Prey_or_predator, Mean_SE) %>% 
+  pivot_wider(names_from = c(Farm_type, Prey_or_predator),
+              values_from = Mean_SE) %>% 
+  write.csv("./Output/Data_clean/Predator_Prey_Abd.csv")
 
 ### Plot
 label1 <- data.frame(Year = c(2017, 2018, 2019, 2017, 2018, 2019),
